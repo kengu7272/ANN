@@ -11,14 +11,11 @@ services:
     environment:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password  # Change this to your MySQL password
-      MYSQL_DATABASE: main  # Change this to your MySQL database name
 
   mysql:
     build:
       context: .
       dockerfile: Dockerfile.mysql
     environment:
-      MYSQL_ROOT_PASSWORD: password  # Change this to your MySQL root password
-      MYSQL_DATABASE: main  # Change this to your MySQL database name
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: main
