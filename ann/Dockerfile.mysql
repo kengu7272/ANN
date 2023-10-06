@@ -1,9 +1,7 @@
 # Use an official MySQL image as the base image
 FROM mysql:latest
 
-# Set environment variables for MySQL
-ENV MYSQL_ROOT_PASSWORD=password
-ENV MYSQL_DATABASE=main
+COPY musicdatabase.sql /docker-entrypoint-initdb.d/
 
 # Expose the MySQL port (default is 3306)
 EXPOSE 3306
