@@ -3,25 +3,36 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "nodemon -L ./server/server.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "next": "latest",
     "react": "latest",
-    "react-dom": "latest",
-    "next": "latest"
+    "react-dom": "latest"
   },
   "devDependencies": {
-    "typescript": "latest",
-    "@types/react": "latest",
     "@types/node": "latest",
+    "@types/react": "latest",
     "@types/react-dom": "latest",
     "autoprefixer": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "nodemon": "^3.0.1",
     "postcss": "latest",
     "tailwindcss": "latest",
-    "eslint": "latest",
-    "eslint-config-next": "latest"
+    "typescript": "latest"
+  },
+  "nodemonConfig": {
+    "watch": ["server/server.mjs", "src/"],
+    "ext": "tsx",
+    "ignore": ["node_modules", ".next", ".docker", "docker-compose.yml"],
+    "execMap": {
+      "tsx": "node --loader ts-node/esm --experimental-specifier-resolution=node"
+    },
+    "exec": "ts-node"
   }
+  
 }

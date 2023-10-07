@@ -11,6 +11,9 @@ services:
     environment:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
+    volumes:
+      - ".:/app"
+      - "/app/node_modules"
 
   mysql:
     build:
