@@ -1,3 +1,5 @@
+CREATE USER 'root'@'localhost' IDENTIFIED BY 'password';
+
 CREATE DATABASE music;
 USE music;
 
