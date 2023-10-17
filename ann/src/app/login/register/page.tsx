@@ -19,6 +19,9 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
 
+  const [registrationStatus, setRegistrationStatus] = useState('');
+  const [registrationMessage, setRegistrationMessage] = useState('');
+
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -51,7 +54,7 @@ export default function Register() {
 
     if (formData.password === confirmPassword) {
       try {
-        const response: Response = await fetch('/api/register', {
+        const response = await fetch('/api/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -59,18 +62,25 @@ export default function Register() {
           body: JSON.stringify(formData),
         });
 
-        if (response.ok) {
-          console.log("Success");
-        } 
-        else {
-          console.log("Failed");
+        const data = await response.json();
+
+        if (data.status == 201) {
+          console.log(response.status);
+          setRegistrationStatus('success');
+          setRegistrationMessage('Registration successful.');
         }
-      } catch (error) {
-        // Handle any network or fetch-related errors
+        else {
+          setRegistrationStatus('failure');
+          setRegistrationMessage(data.error);
+        }
+      } 
+      catch (error) {
+        setRegistrationStatus('failure');
+        setRegistrationMessage('Network or server error. Please try again.');
       }
     } else {
-      // Passwords don't match, you can display an error message
-      alert('Passwords do not match');
+      setRegistrationStatus('failure');
+      setRegistrationMessage('Passwords do not match');
     }
   };
 
@@ -84,7 +94,13 @@ export default function Register() {
           <input required type="password" placeholder="Password" className="h-[10%] p-2 rounded-xl text-neutral-900 w-4/5" value={formData.password} onChange={handlePasswordChange} />
           <input required type="password" placeholder="Confirm Password" className="h-[10%] p-2 rounded-xl text-neutral-900 w-4/5" onChange={handleConfirmPasswordChange} />
           {!passwordsMatch ? <div className="text-red-500">Passwords do not match</div> : null}
-          <input type="submit" value="Register" className="bg-neutral-700 h-1/6 mx-2 rounded-xl w-1/2" disabled={!passwordsMatch} />
+          {registrationStatus === 'success' && (
+            <div className="text-green-500">{registrationMessage}</div>
+          )}
+          {registrationStatus === 'failure' && (
+            <div className="text-red-500">{registrationMessage}</div>
+          )}
+          <input type="submit" value="Register" className="bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 h-1/6 mx-2 rounded-xl w-1/2" disabled={!passwordsMatch} />
         </form>
       </main>
     </div>
