@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "mysql2": "^3.6.1",
     "next": "latest",
     "react": "latest",

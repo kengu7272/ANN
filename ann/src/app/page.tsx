@@ -3,7 +3,7 @@
 export default function Page() {
   return (
     <div className="bgImage h-full w-full flex justify-center items-center">
-      <main className="h-3/4 w-4/5 bg-neutral-900 flex flex-col justify-center items-center gap-10 desktop:max-h-[600px] max-w-[900px] opacity-90 py-6 rounded-xl">
+      <main className="border-2 h-3/4 w-4/5 bg-neutral-900 flex flex-col justify-center items-center gap-10 desktop:max-h-[600px] max-w-[900px] opacity-90 py-6 rounded-xl">
         <section className="flex flex-col h-fit justify-center items-center rounded-xl">
           <h1>ANN</h1>
           <ul className="list-disc pl-5">
