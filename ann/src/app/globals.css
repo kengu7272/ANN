@@ -6,6 +6,8 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  height: 100%;
+  width: 100%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,4 +26,18 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+
+  height: 100%;
+  width: 100%;
+}
+
+.bgImage {
+  background-image: url('../../images/Background_Music_studio_photo_ANN.jpg');
+}
+
+h1 {
+  font-size: 4em;
+}
+h2 {
+  font-size: 3em;
 }

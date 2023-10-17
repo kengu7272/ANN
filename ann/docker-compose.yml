@@ -20,4 +20,6 @@ services:
       context: .
       dockerfile: Dockerfile.mysql
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: 'password'
+    volumes:
+      - "./data:/var/lib/mysql"
