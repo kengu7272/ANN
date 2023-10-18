@@ -5,15 +5,14 @@ import { hash } from 'bcrypt';
 
 export async function POST(req: any) {
   const { username, email, password } = await req.json();
-
   try {
     // Check if the username already exists
-    const [existingUser]: any[] = await db.query(
+    const existingUser: any[] = await db.query(
       'SELECT * FROM users WHERE username = ?',
       [username]
     );
 
-    if (existingUser.length > 0) { 
+    if (existingUser[0].length > 0) { 
       // User already exists
       return Response.json({ 
         status: 409,
@@ -22,12 +21,12 @@ export async function POST(req: any) {
     }
 
     // Check if the username already exists
-    const [existingEmail]: any[] = await db.query(
+    const existingEmail: any[] = await db.query(
       'SELECT * FROM users WHERE email = ?',
       [email]
     );
 
-    if (existingEmail.length > 0) { 
+    if (existingEmail[0].length > 0) { 
       // User already exists
       return Response.json({ 
         status: 408,

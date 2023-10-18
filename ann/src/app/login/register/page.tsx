@@ -96,7 +96,7 @@ export default function Register() {
           <input required type="password" placeholder="Confirm Password" className="h-[10%] p-2 rounded-xl text-neutral-900 w-4/5" onChange={handleConfirmPasswordChange} />
           {!passwordsMatch ? <div className="text-red-500">Passwords do not match</div> : null}
           {registrationStatus === 'success' && (
-            <div className="text-green-500">{registrationMessage}</div>
+            <div className="text-green-500">{registrationMessage}<span> </span><a className='underline' href="/login">Back to login</a></div>
           )}
           {registrationStatus === 'failure' && (
             <div className="text-red-500">{registrationMessage}</div>
