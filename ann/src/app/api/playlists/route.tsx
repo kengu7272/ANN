@@ -1,18 +1,12 @@
 import db from '../db';
 import jwt from 'jsonwebtoken';
 import { headers } from 'next/headers'
-
-interface JwtPayload {
-    username: string;
-    userid: number;
-}
+import JwtPayload from '../payload';
 
 export async function GET(req: any) {
     try {
         const headersList = headers();
         const token = headersList.get('authorization');
-
-        console.log(token);
 
         if (!token) {
             return Response.json({
