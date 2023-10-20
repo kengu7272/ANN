@@ -15,6 +15,7 @@ const config: Config = {
       },
     },
     screens: {
+      'small' : '350px',
       'tablet': '640px',
       'laptop': '1024px',
       'desktop': '1280px',
