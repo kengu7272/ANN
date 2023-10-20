@@ -1,6 +1,7 @@
 // login api endpoint
 import db from '../db'; // Set up your MySQL connection
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'
 
 export async function POST(req: any) {
     const { username, password } = await req.json();
@@ -12,8 +13,18 @@ export async function POST(req: any) {
             [username]
         );      
 
-        const hashedPassword = users[0].password;
+        // if username not found
+        if(users.length === 0) {
+            return Response.json({
+                status: 407,
+                error: 'Login Failed'
+            })
+        }
 
+        const user = users[0];
+        const hashedPassword = user.password;
+
+        // if wrong password
         if(await bcrypt.compare(password, hashedPassword) == false) {
             return Response.json({
                 status: 407,
@@ -21,10 +32,14 @@ export async function POST(req: any) {
              });
         }
             
+        const secretKey: string = process.env.SECRET_KEY!;
+        const token = jwt.sign({ username: user.username, userid: user.userid }, secretKey, { expiresIn: '2h'});
+
         // Successful, user was found
         return Response.json({
             status: 207,
-            message: "Login successful"
+            message: "Login successful",
+            token: token
         });
     }
 

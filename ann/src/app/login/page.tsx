@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface formData {
     username: string;
@@ -9,10 +10,14 @@ interface formData {
 }
 
 export default function Login() {
+    const router = useRouter();
+
+    // hooks for setting messages based on login status, and updating form data
     const [loginStatus, setLoginStatus] = useState('');
     const [loginMessage, setLoginMessage] = useState('');
     const [formData, setFormData] = useState<formData>({ username: '', password: '' });
 
+    // function to submit data to backend
     const handleSubmit  = async (event: FormEvent) => {
         event.preventDefault();
 
@@ -25,22 +30,29 @@ export default function Login() {
                 body: JSON.stringify(formData)
             });
 
+            // set to await because error for some reason if not wait
             const data = await response.json();
 
+            // successful login
             if(data.status == 207) {
                 setLoginStatus('success');
                 setLoginMessage(data.message);
-            }
+
+                sessionStorage.setItem('token', data.token);
+                router.push('/api/home');
+            } // login failure
             else if(data.status == 407 || data.status == 500) {
                 setLoginStatus('failure');
                 setLoginMessage(data.error);
             }
         }
         catch(error){
-
+            setLoginStatus('failure');
+            setLoginMessage('Network or server error. Please try again.');
         }
     }
 
+    // updates form data to submit when data is modified
     const handleInputChange = (event: FormEvent<HTMLInputElement>) => {
         const { name, value } = event.currentTarget;
 
