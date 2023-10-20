@@ -39,7 +39,7 @@ export default function Login() {
                 setLoginMessage(data.message);
 
                 sessionStorage.setItem('token', data.token);
-                router.push('/api/home');
+                router.push('/home');
             } // login failure
             else if(data.status == 407 || data.status == 500) {
                 setLoginStatus('failure');
