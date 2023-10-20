@@ -78,7 +78,8 @@ export default function Register() {
         setRegistrationStatus('failure');
         setRegistrationMessage('Network or server error. Please try again.');
       }
-    } else {
+    } 
+    else {
       setRegistrationStatus('failure');
       setRegistrationMessage('Passwords do not match');
     }
