@@ -14,12 +14,11 @@ services:
     volumes:
       - ".:/app"
       - "/app/node_modules"
-
   mysql:
     build:
       context: .
       dockerfile: Dockerfile.mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'annpassword'
     volumes:
       - "./data:/var/lib/mysql"
