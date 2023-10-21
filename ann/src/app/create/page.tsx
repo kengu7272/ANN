@@ -45,7 +45,7 @@ export default function Create() {
 
             const data = await response.json();
             
-            if(response.ok) {
+            if(data.status >= 200 && data.status < 300) {
                 setCreateStatus('success');
                 setCreateMessage(data.message);
                 router.push('/playlists');
