@@ -15,7 +15,7 @@ export async function GET(req: any) {
             });
         }
 
-        const { username, userid } = jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
+        const { userid } = jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
 
         const [playlists, fields]: any[] = await db.query(
             'SELECT playlistid, name FROM playlists WHERE userid = ?',
