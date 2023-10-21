@@ -1,18 +1,12 @@
 import db from '../db';
 import jwt from 'jsonwebtoken';
 import { headers } from 'next/headers'
-
-interface JwtPayload {
-    username: string;
-    userid: number;
-}
+import JwtPayload from '../payload';
 
 export async function GET(req: any) {
     try {
         const headersList = headers();
         const token = headersList.get('authorization');
-
-        console.log(token);
 
         if (!token) {
             return Response.json({
@@ -25,7 +19,7 @@ export async function GET(req: any) {
 
         const [playlists, fields]: any[] = await db.query(
             'SELECT playlistid, name FROM playlists WHERE userid = ?',
-            [username]
+            [userid]
         );
 
         if(playlists.length === 0) {
@@ -44,7 +38,7 @@ export async function GET(req: any) {
     catch(error) {
         return Response.json({ 
             status: 500,
-            error: 'Internal server error or token verification failed, log in again' 
+            message: 'Internal server error or token verification failed, log in again' 
           });
     }
 }
