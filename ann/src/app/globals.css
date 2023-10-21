@@ -19,7 +19,7 @@
 }
 
 body {
-  color: white;
+  color:white;
   background: linear-gradient(
       to bottom,
       transparent,
@@ -33,6 +33,8 @@ body {
 
 .bgImage {
   background-image: url('../../images/Background_Music_studio_photo_ANN.jpg');
+  background-position: center;
+  background-size: cover;
 }
 
 h1 {
