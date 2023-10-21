@@ -74,19 +74,19 @@ export default function Register() {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    setFormData((prevData) => ({
-        ...prevData,
-        action: 'edit'
-    }));
+    const updatedFormData = {
+      ...formData,
+      action: 'edit'
+    };
 
     try {
-        const response = await fetch('/api/register', {
+        const response = await fetch('/api/profile', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
             'Authorization' : token,
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(updatedFormData),
         });
 
         const data = await response.json();
@@ -95,25 +95,64 @@ export default function Register() {
         {
             setRegistrationStatus('success');
             setRegistrationMessage(data.message);
+            logOut();
         }
-    } catch (error) {
+        else {
+          setRegistrationStatus('failure');
+          setRegistrationMessage(data.error);
+        }
+    } 
+    catch (error) {
             setRegistrationStatus('failure');
             setRegistrationMessage('Internal Server Error');
         }
             
-    }
+  }
   
-    function deleteProfile(){
-        
-    }
     function logOut(){
-        removeToken();
-        router.push('/login');
+      removeToken();
+      router.push('/login');
     }
+
+    async function deleteProfile(){
+      const updatedFormData = {
+        ...formData,
+        action: 'delete'
+      };
+
+      try {
+        const response = await fetch('/api/profile', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : token,
+            },
+            body: JSON.stringify(updatedFormData),
+        });
+
+        const data = await response.json();
+
+        if(data.status >= 200 && data.status < 300)
+        {
+            setRegistrationStatus('success');
+            setRegistrationMessage(data.message);
+            logOut();
+        }
+        else {
+          setRegistrationStatus('failure');
+          setRegistrationMessage(data.error);
+        }
+    } 
+    catch (error) {
+            setRegistrationStatus('failure');
+            setRegistrationMessage('Internal Server Error');
+        }
+    }
+
     return (
         <div className="bgImage flex justify-center items-center h-full w-full">
             <Navbar />
-                <div className="bg-neutral-900 border-2 flex h-1/2 justify-center items-center desktop:max-h-[600px] max-w-[900px] opacity-90 shadow-neutral-900 shadow-2xl w-[90%] laptop:w-1/2">
+                <div className="bg-neutral-900 border-2 flex h-3/4 justify-center items-center desktop:max-h-[600px] max-w-[900px] opacity-90 shadow-neutral-900 shadow-2xl w-[90%] laptop:w-1/2">
                     <form className="bg-transparent flex flex-col gap-8 h-[70%] tablet:h-4/5 items-center justify-center tablet:text-lg w-[95%]" onSubmit={handleSubmit}>
                         <label className="text-3xl tablet:text-4xl">Edit Profile</label>
                         <input required type="text" placeholder="Username" className="h-[10%] p-2 rounded-xl text-neutral-900 w-4/5" value={formData.username} onChange={handleUsernameChange}/>
@@ -122,7 +161,7 @@ export default function Register() {
                         <input required type="password" placeholder="Confirm Password" className="h-[10%] p-2 rounded-xl text-neutral-900 w-4/5" onChange={handleConfirmPasswordChange} />
                         {!passwordsMatch ? <div className="text-red-500">Passwords do not match</div> : null}
                         {registrationStatus === 'success' && (
-                            <div className="text-green-500">{registrationMessage}<span> </span><a className='underline' href="/login">Back to login</a></div>
+                            <div className="text-green-500">{registrationMessage}</div>
                         )}
                         {registrationStatus === 'failure' && (
                             <div className="text-red-500">{registrationMessage}</div>
@@ -132,8 +171,8 @@ export default function Register() {
                     </form>
                 </div>
             <div>
-                <button onClick={logOut} className="absolute bottom-5 right-0 bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 mx-2 rounded-xl w-1/5 max-w-xs">Log Out</button>
-                <button className="absolute bottom-5 left-0 bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 mx-2 rounded-xl w-1/5 max-w-xs">Delete Profile</button>
+                <button onClick={logOut} className="absolute bottom-0 tablet:bottom-5 right-0 h-16 bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 mx-2 rounded-xl w-1/3 tablet:w-1/5 max-w-xs">Log Out</button>
+                <button onClick={deleteProfile} className="absolute bottom-0 tablet:bottom-5 h-16 left-0 bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 mx-2 rounded-xl w-1/3 tablet:w-1/5 max-w-xs">Delete Profile</button>
             </div>
         </div>
     )

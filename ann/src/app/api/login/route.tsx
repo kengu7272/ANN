@@ -33,7 +33,7 @@ export async function POST(req: any) {
         }
             
         const secretKey: string = process.env.SECRET_KEY!;
-        const token = jwt.sign({ username: user.username, userid: user.userid }, secretKey, { expiresIn: '2h'});
+        const token = jwt.sign({ name: user.username, userid: user.userid, emailAddress: user.email }, secretKey, { expiresIn: '2h'});
 
         // Successful, user was found
         return Response.json({

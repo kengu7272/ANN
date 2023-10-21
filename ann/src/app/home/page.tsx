@@ -1,7 +1,7 @@
 // Home page
 "use client";
 
-import Navbar from "../components/navbar";
+import Navbar from '../components/navbar';
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from 'react';
 
