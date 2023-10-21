@@ -1,9 +1,29 @@
 // playlists page
 "use client";
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '../components/navbar';
+
+interface PlaylistListProps {
+    playlists: any[];
+}
+
+const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
+    return (
+        <div className='bg-neutral-900 border-2 flex flex-col justify-center min-h-[50px] opacity-90 w-full'>
+            {playlists.length > 0 ? (
+                playlists.map((playlist) => (
+                    <div className='even:bg-neutral-800 flex items-center h-16 w-full px-2'> 
+                        <p>{playlist.name}</p>
+                    </div>
+                ))
+            ) : (
+                <p>No playlists available</p>
+            )}
+        </div>
+    );
+}
 
 export default function Playlists() {
     const router = useRouter();
@@ -46,17 +66,9 @@ export default function Playlists() {
     return (
         <div className='bgImage h-full w-full flex flex-row items-center justify-center'>
             <Navbar/>
-            <div>   
-            {playlists.length > 0 ? (
-                playlists.map((playlist) => (
-                    <div> 
-                        {playlist.name}
-                    </div>
-                ))
-            ) : (
-                <p>No playlists available</p>
-            )}
-            </div>
+            <main className='w-4/5 flex laptop:flex-row items-center justify-center'>
+                <PlaylistsList playlists={playlists}/>
+            </main>
         </div>
     );
 }
