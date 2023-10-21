@@ -19,7 +19,7 @@ export async function GET(req: any) {
 
         const [playlists, fields]: any[] = await db.query(
             'SELECT playlistid, name FROM playlists WHERE userid = ?',
-            [username]
+            [userid]
         );
 
         if(playlists.length === 0) {
@@ -38,7 +38,7 @@ export async function GET(req: any) {
     catch(error) {
         return Response.json({ 
             status: 500,
-            error: 'Internal server error or token verification failed, log in again' 
+            message: 'Internal server error or token verification failed, log in again' 
           });
     }
 }

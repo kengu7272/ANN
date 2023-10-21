@@ -3,9 +3,17 @@
 
 import Navbar from "../components/navbar";
 import { useState, FormEvent, ChangeEvent } from 'react';
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+    const router = useRouter();
+
+    const token = sessionStorage.getItem('token');
+    if(!token) {
+        router.push("/login");
+        return;
+    }
+
     const [playlistName, setPlaylistName] = useState('');
     const [createStatus, setCreateStatus] = useState('');
     const [createMessage, setCreateMessage] = useState('');
@@ -18,8 +26,6 @@ export default function Home() {
         event.preventDefault();
 
         try {
-            const token: string = sessionStorage.getItem('token')!;
-
             const response = await fetch('/api/create', {
                 method: 'POST',
                 headers: {
@@ -49,8 +55,7 @@ export default function Home() {
                 setCreateStatus('success');
                 setCreateMessage(data.message);
                 
-                const router = useRouter();
-                router.push('/edit');
+                //router.push('/edit');
             }
         }   
         catch(error) {
