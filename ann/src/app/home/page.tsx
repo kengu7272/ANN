@@ -1,17 +1,24 @@
 // Home page
 "use client";
 
-import Navbar from "../components/navbar"
+import Navbar from "../components/navbar";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from 'react';
 
 export default function Home() {
     const router = useRouter();
-    const token = sessionStorage.getItem('token');
     
-    if(!token) {
-        router.push("/login");
-        return;
-    }
+    const [token, setToken] = useState('');
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('token');
+        if(!token) {
+            router.push("/login");
+            return;
+        }
+
+        setToken(token!);
+    }, []);
 
     return (
     <div className="bgImage bg-center bg-cover h-full w-full">

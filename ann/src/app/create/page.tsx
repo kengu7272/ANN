@@ -2,17 +2,23 @@
 "use client";
 
 import Navbar from "../components/navbar";
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useEffect, useState, FormEvent, ChangeEvent } from 'react';
 import { useRouter } from "next/navigation";
 
 export default function Home() {
     const router = useRouter();
 
-    const token = sessionStorage.getItem('token');
-    if(!token) {
-        router.push("/login");
-        return;
-    }
+    const [token, setToken] = useState('');
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('token');
+        if(!token) {
+            router.push("/login");
+            return;
+        }
+
+        setToken(token!);
+    }, []);
 
     const [playlistName, setPlaylistName] = useState('');
     const [createStatus, setCreateStatus] = useState('');
@@ -38,24 +44,15 @@ export default function Home() {
             });
 
             const data = await response.json();
-
-            if(data.status === 407) {
-                setCreateStatus('failure');
-                setCreateMessage(data.error);
-            }
-            else if(data.status === 408) {
-                setCreateStatus('failure');
-                setCreateMessage(data.error);
-            }
-            else if(data.status === 500) {
-                setCreateStatus('failure');
-                setCreateMessage(data.error);
-            }
-            else if(data.status === 208) {
+            
+            if(response.ok) {
                 setCreateStatus('success');
                 setCreateMessage(data.message);
-                
-                //router.push('/edit');
+                router.push('/playlists');
+            }
+            else {
+                setCreateStatus('failure');
+                setCreateMessage(data.error);
             }
         }   
         catch(error) {
@@ -76,6 +73,6 @@ export default function Home() {
                         <input type="submit" value="Create" className="bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 h-1/6 mx-2 rounded-xl w-1/2"/>
                     </form>
                 </div>
-        </div>    
+        </div>
     )
 }
