@@ -22,8 +22,8 @@ export async function POST(req: any) {
 
         if(action === 'edit') {
             await db.execute(
-                'UPDATE users SET username = ?, email = ?, password = ?',
-                [username, email, password]
+                'UPDATE users SET username = ?, email = ?, password = ? WHERE userid = ?',
+                [username, email, password, userid]
             )
 
             return Response.json({
