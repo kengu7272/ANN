@@ -10,10 +10,9 @@ Purpose:<br>
 Music application that does various things including playlist management and music trivia<br>
 <br>
 Stack:<br>
-React + Tailwind CSS<br>
-Next<br>
+Next + Tailwind CSS<br>
 MySQL<br>
-Docker
+Docker - to host locally
 
 ## Current Status
 - Registration/login system - implemented
@@ -24,7 +23,7 @@ Docker
 - Music Trivia - needs implemented
 
 ## Steps to locally run
-1. Clone the GitHub repo using in the terminal "git clone https://github.com/kengu7272/ANN"
+1. Clone the GitHub repo using the terminal "git clone https://github.com/kengu7272/ANN"
 2. Install Docker:<br>
 Windows: https://docs.docker.com/desktop/install/linux-install/<br>
 Linux: https://docs.docker.com/desktop/install/linux-install/<br>
@@ -39,6 +38,12 @@ MYSQL_ROOT_PASSWORD will be the password for root of the MySql server
 6. Run "docker-compose up" to launch the Docker containers<br>
 (Dev environment currently, terminal will say localhost:3000 ready when server is up)
 7. Visit http://localhost:3000/ on your browser to view project locally
+
+## Current Functions You Can Explore
+1. Registering an account with password check
+2. Logging in and being issued a jsonwebtoken for authentication
+3. Editing account details or deleting account
+4. Creating playlists and displaying playlist (will be implementing adding songs to them very soon)
 
 ## Note
 1. The data directory is used to persist the MySql server data as containers are not persistent
