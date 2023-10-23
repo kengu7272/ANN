@@ -3,49 +3,33 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon -L ./server/server.mjs",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/bcrypt": "^5.0.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.6.1",
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest"
+    "next": "^13.5.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/eslint": "^8.44.4",
     "@types/jsonwebtoken": "^9.0.4",
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
-    "autoprefixer": "latest",
-    "eslint": "latest",
-    "eslint-config-next": "latest",
-    "nodemon": "^3.0.1",
-    "postcss": "latest",
-    "tailwindcss": "latest",
-    "typescript": "latest"
-  },
-  "nodemonConfig": {
-    "watch": [
-      "server/server.mjs",
-      "src/"
-    ],
-    "ext": "tsx,css",
-    "ignore": [
-      "node_modules",
-      ".next",
-      ".docker",
-      "docker-compose.yml"
-    ],
-    "execMap": {
-      "tsx": "node --loader ts-node/esm --experimental-specifier-resolution=node"
-    },
-    "exec": "ts-node"
+    "@types/node": "^20.8.5",
+    "@types/react": "^18.2.28",
+    "@types/react-dom": "^18.2.13",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.51.0",
+    "eslint-config-next": "^13.5.4",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.2.2"
   }
 }

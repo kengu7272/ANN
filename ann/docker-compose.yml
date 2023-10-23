@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   frontend:
     build:
@@ -7,18 +7,30 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       MYSQL_HOST: mysql
       MYSQL_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SECRET_KEY: ${SECRET_KEY}
     volumes:
-      - ".:/app"
-      - "/app/node_modules"
+      - "./src:/app/src"
+
   mysql:
-    build:
-      context: .
-      dockerfile: Dockerfile.mysql
+    image: mysql:latest
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      interval: 3s
+      retries: 10
     volumes:
-      - "./data:/var/lib/mysql"
+      - ./musicdatabase.sql:/docker-entrypoint-initdb.d/musicdatabase.sql
+      - mysql:/var/lib/mysql
+
+volumes:
+  mysql:
