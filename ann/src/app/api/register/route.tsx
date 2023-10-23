@@ -1,10 +1,9 @@
 // Register api endpoint
 
-import type { NextRequest } from 'next/server';
 import db from '../db'; // Set up your MySQL connection
 import { hash } from 'bcrypt';
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   const { username, email, password } = await req.json();
   try {
     // Check if the username already exists
