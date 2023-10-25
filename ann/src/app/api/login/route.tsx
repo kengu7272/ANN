@@ -44,6 +44,7 @@ export async function POST(req: any) {
     }
 
     catch(error) {
+    console.error('Database error:', error);
         return Response.json({ 
             status: 500,
             error: 'Internal server error' 
