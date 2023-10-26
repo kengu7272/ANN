@@ -2,6 +2,7 @@ import db from '../db';
 import jwt from 'jsonwebtoken';
 import { headers } from 'next/headers'
 import JwtPayload from '../payload';
+import { RowDataPacket, FieldPacket } from 'mysql2';
 
 export async function GET(req: Request) {
     try {
@@ -17,7 +18,7 @@ export async function GET(req: Request) {
 
         const { userid } = jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
 
-        const [playlists, fields]: any[] = await db.query(
+        const [playlists, fields]: [RowDataPacket[], FieldPacket[]] = await db.query(
             'SELECT playlistid, name FROM playlists WHERE userid = ?',
             [userid]
         );

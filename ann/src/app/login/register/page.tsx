@@ -9,6 +9,12 @@ interface RegistrationData {
   password: string;
 }
 
+interface ResponseData {
+  status: number;
+  message: string;
+  error: string;
+}
+
 export default function Register() {
   const [formData, setFormData] = useState<RegistrationData>({
     username: '',
@@ -62,7 +68,7 @@ export default function Register() {
           body: JSON.stringify(formData),
         });
 
-        const data = await response.json();
+        const data: ResponseData = await response.json() as ResponseData;
 
         if (data.status == 201) {
           console.log(response.status);
