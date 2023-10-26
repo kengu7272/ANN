@@ -1,6 +1,3 @@
-CREATE DATABASE music;
-USE music;
-
 CREATE TABLE artists(
     artistid INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL
@@ -26,8 +23,8 @@ CREATE TABLE songs(
     durationSeconds DECIMAL(6,2),
     lyrics TEXT,
 
-    FOREIGN KEY (artistid) REFERENCES artists(artistid),
-    FOREIGN KEY (albumid) REFERENCES albums(albumid)
+    KEY artistid_idx (artistid),
+    KEY albumid_idx (albumid)
 );
 
 CREATE TABLE playlists (
@@ -35,7 +32,7 @@ CREATE TABLE playlists (
     userid INT NOT NULL,
     name VARCHAR(50) NOT NULL,
 
-    FOREIGN KEY (userid) REFERENCES users(userid)
+    KEY userid_idx (userid)
 );
 
 CREATE TABLE playlist_songs (
@@ -43,7 +40,7 @@ CREATE TABLE playlist_songs (
     playlistid INT NOT NULL,
     songid INT NOT NULL,
 
-    FOREIGN KEY (playlistid) REFERENCES playlists(playlistid),
-    FOREIGN KEY (songid) REFERENCES songs(songid)
+    KEY playlistid_idx (playlistid),
+    KEY songid_idx (songid)
 );
 
