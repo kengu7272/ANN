@@ -72,7 +72,7 @@ export default function Login() {
                     <input onChange={handleInputChange} name="password" required type="password" placeholder='Password' className='h-[10%] p-2 rounded-xl text-neutral-900 w-4/5'/>
                     {loginStatus === 'success' && (<div className='text-green-500'>{loginMessage}</div>)}
                     {loginStatus === 'failure' && (<div className='text-red-500'>{loginMessage}</div>)}
-                    <div className="h-[2px] bg-white my-8 w-4/5"></div>
+                    {loginStatus === '' && (<div className="h-[2px] bg-white my-8 w-4/5"></div>)}
                     <div className='bg-transparent flex flex-row justify-center h-1/6 items-center w-full'>
                         <a href='/login/register' className='bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 flex items-center h-full justify-center mx-2 rounded-xl text-center w-[45%]'>Register</a>
                         <input type="submit" value="Login" className='bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 h-full mx-2 rounded-xl w-[45%]'/>
