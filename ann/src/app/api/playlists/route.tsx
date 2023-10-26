@@ -4,6 +4,8 @@ import { headers } from 'next/headers'
 import JwtPayload from '../payload';
 import { RowDataPacket, FieldPacket } from 'mysql2';
 
+export const dynamic = "force-dynamic"
+
 export async function GET(req: Request) {
     try {
         const headersList = headers();
@@ -37,9 +39,14 @@ export async function GET(req: Request) {
         });
     }
     catch(error) {
+        let errorMessage = '';
+        if (error instanceof Error) {
+             errorMessage = error.message + " unhandled server error";
+          }
+
         return Response.json({ 
             status: 500,
-            message: 'Internal server error or token verification failed, log in again' 
+            message: errorMessage
           });
     }
 }
