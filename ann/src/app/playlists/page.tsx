@@ -54,6 +54,7 @@ export default function Playlists() {
 
                 const response = await fetch('/api/playlists', {
                     method: 'GET',
+                    cache: "force-cache",
                     headers: {
                         'Authorization': token
                     }
