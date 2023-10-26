@@ -39,7 +39,7 @@ export async function GET(req: Request) {
     catch(error) {
         let errorMessage = '';
         if (error instanceof Error) {
-             errorMessage = error.message;
+             errorMessage = error.message + "unhandled server error";
           }
 
         return Response.json({ 
