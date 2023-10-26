@@ -37,9 +37,14 @@ export async function GET(req: Request) {
         });
     }
     catch(error) {
+        let errorMessage = '';
+        if (error instanceof Error) {
+             errorMessage = error.message;
+          }
+
         return Response.json({ 
             status: 500,
-            message: error
+            message: errorMessage
           });
     }
 }
