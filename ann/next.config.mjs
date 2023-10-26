@@ -5,6 +5,7 @@ const config =  {
     locales: ["en"],
     defaultLocale: "en",
   },
+  staticPageGenerationTimeout: 1000,
 };
 
 export default config
