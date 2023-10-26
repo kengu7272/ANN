@@ -32,7 +32,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                     </div>
                 ))
             ) : (
-                <p>No playlists available</p>
+                <p className='px-2'>No playlists available</p>
             )}
         </div>
     );
