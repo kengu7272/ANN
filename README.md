@@ -10,9 +10,9 @@ Purpose:
 Music application that does various things including playlist management and music trivia  
   
 Stack:  
-Next + Tailwind CSS  
-MySQL  
-Docker - to host locally
+Next + Tailwind CSS: Hosted on Vercel
+MySQL: Hosted on PlanetScale
+
 
 ## Current Status
 - Registration/login system - implemented
