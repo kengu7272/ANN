@@ -39,7 +39,7 @@ export async function GET(req: Request) {
     catch(error) {
         return Response.json({ 
             status: 500,
-            message: 'Internal server error or token verification failed, log in again' 
+            message: error as string 
           });
     }
 }
