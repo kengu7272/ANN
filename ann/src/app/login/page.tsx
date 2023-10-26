@@ -3,6 +3,7 @@
 
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import ResponseData from '../interfaces/loggedInResponseData';
 
 interface formData {
     username: string;
@@ -31,7 +32,7 @@ export default function Login() {
             });
 
             // set to await because error for some reason if not wait
-            const data = await response.json();
+            const data: ResponseData = await response.json() as ResponseData;
 
             // successful login
             if(data.status == 207) {

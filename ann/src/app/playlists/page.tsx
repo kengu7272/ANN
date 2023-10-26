@@ -5,8 +5,21 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '../components/navbar';
 
+interface Columns {
+    playlistid: number;
+    userid: number;
+    name: string;
+}
+
 interface PlaylistListProps {
-    playlists: any[];
+    playlists: Columns[];
+}
+
+interface ResponseData {
+    status: number;
+    message: string;
+    error: string;
+    playlists: Columns[];
 }
 
 const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
@@ -14,7 +27,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
         <div className='bg-neutral-900 border-2 flex flex-col justify-center min-h-[50px] opacity-90 w-full'>
             {playlists.length > 0 ? (
                 playlists.map((playlist) => (
-                    <div className='even:bg-neutral-800 flex items-center h-16 w-full px-2'> 
+                    <div className='even:bg-neutral-800 flex items-center h-16 w-full px-2' key={playlist.playlistid}> 
                         <p>{playlist.name}</p>
                     </div>
                 ))
@@ -27,10 +40,10 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
 
 export default function Playlists() {
     const router = useRouter();
-    const [playlists, setPlaylists] = useState<any[]>([]);
+    const [playlists, setPlaylists] = useState<Columns[]>([]);
 
     useEffect(() => {
-        const fetchPlaylists = async () => {
+        async function fetchPlaylists() {
             try {
                 const token = sessionStorage.getItem('token');
 
@@ -46,7 +59,7 @@ export default function Playlists() {
                     }
                 });
 
-                const data = await response.json();
+                const data: ResponseData = await response.json() as ResponseData;
 
                 if(data.status === 200) {
                     setPlaylists(data.playlists);
@@ -56,11 +69,11 @@ export default function Playlists() {
                 }
             }
             catch(error) {
-                console.log("Error occured");
+                console.error("Error occured");
             }
         }
 
-        fetchPlaylists();
+        void fetchPlaylists();
     }, []);
 
     return (

@@ -16,7 +16,7 @@ export default function Home() {
             return;
         }
 
-        setToken(token!);
+        setToken(token);
     }, []);
 
     return (

@@ -2,12 +2,20 @@
 
 import db from '../db'; // Set up your MySQL connection
 import { hash } from 'bcrypt';
+import { RowDataPacket, FieldPacket } from 'mysql2';
+
+interface RequestData {
+  username: string;
+  email: string;
+  password: string;
+}
 
 export async function POST(req: Request) {
-  const { username, email, password } = await req.json();
+  const { username, email, password }: RequestData = await req.json() as RequestData;
+
   try {
     // Check if the username already exists
-    const existingUser: any[] = await db.query(
+    const existingUser: [RowDataPacket[], FieldPacket[]] = await db.query(
       'SELECT * FROM users WHERE username = ?',
       [username]
     );
@@ -21,7 +29,7 @@ export async function POST(req: Request) {
     }
 
     // Check if the username already exists
-    const existingEmail: any[] = await db.query(
+    const existingEmail: [RowDataPacket[], FieldPacket[]] = await db.query(
       'SELECT * FROM users WHERE email = ?',
       [email]
     );

@@ -4,6 +4,11 @@ import db from '../db';
 import jwt from 'jsonwebtoken';
 import JwtPayload from '../payload';
 import { headers } from 'next/headers';
+import { RowDataPacket, FieldPacket } from 'mysql2';
+
+interface RequestData {
+    name: string;
+}
 
 export async function POST(req: Request) {
     try {
@@ -20,10 +25,10 @@ export async function POST(req: Request) {
 
         // get values to upload to db
         const { userid } = jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
-        const { name } = await req.json();
+        const { name }: RequestData = await req.json() as RequestData;
 
         // Check if user has a playlist of the same name already
-        const [playlists, fields]: any[] = await db.query(
+        const [playlists, fields]: [RowDataPacket[], FieldPacket[]] = await db.query(
             'SELECT * FROM playlists WHERE userid = ? AND name = ?',
             [userid, name]
         );

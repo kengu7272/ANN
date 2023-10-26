@@ -4,6 +4,7 @@
 import Navbar from "../components/navbar";
 import React, { useState, ChangeEvent, FormEvent, useEffect} from 'react';
 import { useRouter } from "next/navigation";
+import ResponseData from "../interfaces/loggedInResponseData";
 
 interface ProfileData {
   action: string;
@@ -35,7 +36,7 @@ export default function Register() {
           return;
       }
 
-      setToken(token!);
+      setToken(token);
   }, []);
 
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -89,7 +90,7 @@ export default function Register() {
             body: JSON.stringify(updatedFormData),
         });
 
-        const data = await response.json();
+        const data: ResponseData = await response.json() as ResponseData;
 
         if(data.status >= 200 && data.status < 300)
         {
@@ -130,7 +131,7 @@ export default function Register() {
             body: JSON.stringify(updatedFormData),
         });
 
-        const data = await response.json();
+        const data: ResponseData = await response.json() as ResponseData;
 
         if(data.status >= 200 && data.status < 300)
         {

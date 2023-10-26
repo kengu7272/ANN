@@ -4,6 +4,7 @@
 import Navbar from "../components/navbar";
 import { useEffect, useState, FormEvent, ChangeEvent } from 'react';
 import { useRouter } from "next/navigation";
+import ResponseData from "../interfaces/loggedInResponseData";
 
 export default function Create() {
     const router = useRouter();
@@ -17,7 +18,7 @@ export default function Create() {
             return;
         }
 
-        setToken(token!);
+        setToken(token);
     }, []);
 
     const [playlistName, setPlaylistName] = useState('');
@@ -43,7 +44,7 @@ export default function Create() {
                 })
             });
 
-            const data = await response.json();
+            const data: ResponseData = await response.json() as ResponseData;
             
             if(data.status >= 200 && data.status < 300) {
                 setCreateStatus('success');
