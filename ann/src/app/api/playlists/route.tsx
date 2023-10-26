@@ -4,6 +4,8 @@ import { headers } from 'next/headers'
 import JwtPayload from '../payload';
 import { RowDataPacket, FieldPacket } from 'mysql2';
 
+export const dynamic = "force-dynamic"
+
 export async function GET(req: Request) {
     try {
         const headersList = headers();
@@ -39,7 +41,7 @@ export async function GET(req: Request) {
     catch(error) {
         let errorMessage = '';
         if (error instanceof Error) {
-             errorMessage = error.message + "unhandled server error";
+             errorMessage = error.message + " unhandled server error";
           }
 
         return Response.json({ 
