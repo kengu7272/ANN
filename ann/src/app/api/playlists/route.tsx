@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { headers } from 'next/headers'
 import JwtPayload from '../payload';
 
-export async function GET(req: any) {
+export async function GET(req: Request) {
     try {
         const headersList = headers();
         const token = headersList.get('authorization');

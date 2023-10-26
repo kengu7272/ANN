@@ -3,7 +3,7 @@ import db from '../db'; // Set up your MySQL connection
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 
-export async function POST(req: any) {
+export async function POST(req: Request) {
     const { username, password } = await req.json();
 
     try {

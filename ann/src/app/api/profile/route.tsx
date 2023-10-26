@@ -7,7 +7,7 @@ import JwtPayload from '../payload';
 import { hash } from 'bcrypt';
 
 
-export async function POST(req: any) {
+export async function POST(req: Request) {
     try {
         const headersList = headers();
         const token = headersList.get('Authorization');

@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import JwtPayload from '../payload';
 import { headers } from 'next/headers';
 
-export async function POST(req: any) {
+export async function POST(req: Request) {
     try {
         // get token from header
         const headersList = headers();
