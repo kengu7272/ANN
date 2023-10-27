@@ -25,7 +25,8 @@ interface PlaylistResponseData {
 
 // These two for playlist songs fetch response object
 interface PlaylistSongsColumns {
-    playlist_song_id: number
+    songid: number;
+    songTitle: string;
 }
 
 interface PlaylistSongsResponseData {
@@ -38,6 +39,7 @@ interface PlaylistSongsResponseData {
 // Component that holds playlists list and generates songs list based on selected playlist
 const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     const [playlistNum, setPlaylistNum] = useState(-1);
+    const [playlistSongs, setPlaylistSongs] = useState<PlaylistSongsColumns[]>([]);
 
     const handlePlaylistClick = (playlistid: number) => {
         setPlaylistNum(playlistid);
@@ -79,14 +81,22 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                             </div>
                         ))
                     ) : (
-                        <p className='px-2 text-center'>No playlists available</p>
+                        <p className='px-2 text-center my-auto'>No playlists available</p>
                     )}
                 </div>
             </div>
             <div className='mb-24 laptop:mb-0 w-full laptop:w-1/2 text-center'>
                 <p className='text-4xl mb-2'>Songs</p>
-                <div className='bg-neutral-900 border-2 flex flex-col justify-center h-[400px] laptop:h-[500px] opacity-90'>
-
+                <div className='bg-neutral-900 border-2 0 flex flex-col h-[400px] laptop:h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
+                    {playlistNum != -1 && playlistSongs.length > 0 ? (
+                        playlistSongs.map((song) => (
+                            <div className='even:bg-neutral-800 active:bg-neutral-600 flex flex-none items-center h-16 w-full px-2' key={song.songid}> 
+                                {song.songTitle}
+                            </div>
+                        ))
+                    ) : (
+                        <p className='text-center px-2 my-auto'>No songs available</p>
+                    )}
                 </div>
             </div>
         </main>

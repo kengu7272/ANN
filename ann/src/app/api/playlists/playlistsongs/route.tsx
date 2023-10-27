@@ -32,13 +32,26 @@ export async function GET(req: Request) {
         const { playlistid }: RequestData = await req.json() as RequestData;
 
         const [playlistsongs, fields]: [RowDataPacket[], FieldPacket[]] = await db.query(
-            `SELECT songs.title 
+            `SELECT songs.songid, songs.title 
             FROM playlists JOIN playlist_songs 
             ON playlists.playlistid = playlist_songs JOIN songs
             ON playlist_songs.songid = songs.songid
             WHERE userid = ? AND playlistid = ?`,
             [userid, playlistid]
         );
+
+        if(playlistsongs.length < 1) {
+            return Response.json({
+                status: 408,
+                error: "User has no playlists"
+            });
+        }
+
+        return Response.json({
+            status: 207,
+            message: "Playlist songs retrieved successfully",
+            playlistsongs: playlistsongs
+        })
     }
     catch(error) {
         if (error instanceof Error) {          
