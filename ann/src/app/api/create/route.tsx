@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     try {
         // get token from header
         const headersList = headers();
-        const token = headersList.get('authorization');
+        const token = headersList.get('Authorization');
 
         if (!token) {
             return Response.json({

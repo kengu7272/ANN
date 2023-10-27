@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '../components/navbar';
 
+// These three for playlist fetch response object, component object
 interface PlaylistColumns {
     playlistid: number;
     userid: number;
@@ -22,12 +23,9 @@ interface PlaylistResponseData {
     playlists: PlaylistColumns[];
 }
 
+// These two for playlist songs fetch response object
 interface PlaylistSongsColumns {
     playlist_song_id: number
-}
-
-interface PlaylistListSongsProps {
-    playlists: PlaylistSongsColumns[];
 }
 
 interface PlaylistSongsResponseData {
@@ -37,6 +35,7 @@ interface PlaylistSongsResponseData {
     playlists: PlaylistSongsColumns[];
 }
 
+// Component that holds playlists list and generates songs list based on selected playlist
 const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     const [playlistNum, setPlaylistNum] = useState(-1);
 
@@ -45,8 +44,23 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     }
 
     const getSongs = async (playlistid: number) => {
-        //Need to implement fetch to grab songs from playlist_songs table
-        const response = await fetch("/api/playlists/playlistsongs");
+        try {
+            const token: string = sessionStorage.getItem('token')!;
+            const response: Response = await fetch("/api/playlists/playlistsongs", {
+                method: 'GET',
+                headers: {
+                    'Authorization': token
+                },
+                body: JSON.stringify({
+                    playlistid: playlistid
+                })
+            });
+
+            const data: PlaylistSongsResponseData = await response.json() as PlaylistSongsResponseData;
+        }
+        catch(error) {
+            console.error("Internal server error");
+        }
     }
 
     if(playlistNum != -1) {

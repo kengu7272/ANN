@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic"
 export async function GET(req: Request) {
     try {
         const headersList = headers();
-        const token = headersList.get('authorization');
+        const token = headersList.get('Authorization');
 
         if (!token) {
             return Response.json({
