@@ -22,17 +22,19 @@ interface ResponseData {
     playlists: Columns[];
 }
 
+
+
 const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     return (
-        <div className='bg-neutral-900 border-2 flex flex-col justify-center min-h-[50px] opacity-90 w-full'>
+        <div className='bg-neutral-900 border-2 flex flex-col max-h-96 opacity-90 w-5/6 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
             {playlists.length > 0 ? (
                 playlists.map((playlist) => (
-                    <div className='even:bg-neutral-800 flex items-center h-16 w-full px-2' key={playlist.playlistid}> 
-                        <p>{playlist.name}</p>
+                    <div className='even:bg-neutral-800 flex flex-none items-center h-16 w-full px-2' key={playlist.playlistid}> 
+                        {playlist.name}
                     </div>
                 ))
             ) : (
-                <p className='px-2'>No playlists available</p>
+                <p className='px-2 text-center'>No playlists available</p>
             )}
         </div>
     );
@@ -77,10 +79,13 @@ export default function Playlists() {
     }, []);
 
     return (
-        <div className='bgImage h-full w-full flex flex-row items-center justify-center'>
+        <div className='bgImage h-full w-full flex items-center justify-center'>
             <Navbar/>
-            <main className='w-4/5 flex laptop:flex-row items-center justify-center'>
+            <main className='w-4/5 flex flex-col laptop:flex-row gap-4 items-center justify-center'>
                 <PlaylistsList playlists={playlists}/>
+                <div className='bg-neutral-900 border-2 flex flex-col justify-center min-h-[50px] opacity-90 w-5/6'>
+
+                </div>
             </main>
         </div>
     );
