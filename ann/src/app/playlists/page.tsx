@@ -64,7 +64,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     }
 
     if(playlistNum != -1) {
-        getSongs(playlistNum)
+        void getSongs(playlistNum)
     }
 
     return (
