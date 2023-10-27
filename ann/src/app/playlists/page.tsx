@@ -68,22 +68,28 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     }
 
     return (
-        <>
-            <div className='bg-neutral-900 border-2 flex flex-col max-h-96 opacity-90 w-5/6 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
-                {playlists.length > 0 ? (
-                    playlists.map((playlist) => (
-                        <div onClick={() => { handlePlaylistClick(playlist.playlistid) }} className='even:bg-neutral-800 flex flex-none items-center h-16 w-full px-2' key={playlist.playlistid}> 
-                            {playlist.name}
-                        </div>
-                    ))
-                ) : (
-                    <p className='px-2 text-center'>No playlists available</p>
-                )}
+        <main className='w-4/5 flex flex-col laptop:flex-row gap-8 items-center justify-center'>
+            <div className='mt-[500px] laptop:mt-0 w-full laptop:w-1/2 text-center'>
+                <p className='text-4xl mb-2'>Playlists</p>
+                <div className='bg-neutral-900 border-2 0 flex flex-col h-[400px] laptop:h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
+                    {playlists.length > 0 ? (
+                        playlists.map((playlist) => (
+                            <div onClick={() => { handlePlaylistClick(playlist.playlistid) }} className='even:bg-neutral-800 active:bg-neutral-600 flex flex-none items-center h-16 w-full px-2' key={playlist.playlistid}> 
+                                {playlist.name}
+                            </div>
+                        ))
+                    ) : (
+                        <p className='px-2 text-center'>No playlists available</p>
+                    )}
+                </div>
             </div>
-            <div className='bg-neutral-900 border-2 flex flex-col justify-center min-h-[50px] opacity-90 w-5/6'>
+            <div className='mb-24 laptop:mb-0 w-full laptop:w-1/2 text-center'>
+                <p className='text-4xl mb-2'>Songs</p>
+                <div className='bg-neutral-900 border-2 flex flex-col justify-center h-[400px] laptop:h-[500px] opacity-90'>
 
+                </div>
             </div>
-        </>
+        </main>
     );
 }
 
@@ -126,11 +132,9 @@ export default function Playlists() {
     }, []);
 
     return (
-        <div className='bgImage h-full w-full flex items-center justify-center'>
+        <div className='h-full w-full flex items-center justify-center'>
             <Navbar/>
-            <main className='w-4/5 flex flex-col laptop:flex-row gap-4 items-center justify-center'>
-                <PlaylistsList playlists={playlists}/>
-            </main>
+            <PlaylistsList playlists={playlists}/>
         </div>
     );
 }
