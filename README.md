@@ -5,7 +5,7 @@ Purpose:
 Music application that does various things including playlist management and music trivia  
   
 Stack:  
-Next + Tailwind CSS: Hosted on Vercel
+Next + Tailwind CSS: Hosted on Vercel  
 MySQL: Hosted on PlanetScale
 
 
