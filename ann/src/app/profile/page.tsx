@@ -110,50 +110,53 @@ export default function Register() {
             
   }
   
-    function logOut(){
-      removeToken();
-      router.push('/login');
-    }
+  function logOut(){
+    removeToken();
+    router.push('/login');
+  }
 
-    async function deleteProfile(){
-      const updatedFormData = {
-        ...formData,
-        action: 'delete'
-      };
+  const [deleteButton, setDeleteButton] = useState(false);
 
-      try {
-        const response = await fetch('/api/profile', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            'Authorization' : token,
-            },
-            body: JSON.stringify(updatedFormData),
-        });
+  async function deleteProfile(){
+    const updatedFormData = {
+      ...formData,
+      action: 'delete'
+    };
 
-        const data: ResponseData = await response.json() as ResponseData;
+    try {
+      const response = await fetch('/api/profile', {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : token,
+          },
+          body: JSON.stringify(updatedFormData),
+      });
 
-        if(data.status >= 200 && data.status < 300)
-        {
-            setRegistrationStatus('success');
-            setRegistrationMessage(data.message);
-            logOut();
-        }
-        else {
+      const data: ResponseData = await response.json() as ResponseData;
+
+      if(data.status >= 200 && data.status < 300)
+      {
+          setRegistrationStatus('success');
+          setRegistrationMessage(data.message);
+          logOut();
+      }
+      else {
+        setRegistrationStatus('failure');
+        setRegistrationMessage(data.error);
+      }
+  } 
+  catch (error) {
           setRegistrationStatus('failure');
-          setRegistrationMessage(data.error);
-        }
-    } 
-    catch (error) {
-            setRegistrationStatus('failure');
-            setRegistrationMessage('Internal Server Error');
-        }
-    }
+          setRegistrationMessage('Internal Server Error');
+      }
+  }
 
     return (
-        <div className="bgImage flex justify-center items-center h-full w-full">
+        <div className="flex justify-center items-center h-full w-full">
             <Navbar />
-                <div className="bg-neutral-900 border-2 flex h-3/4 justify-center items-center desktop:max-h-[600px] max-w-[900px] opacity-90 shadow-neutral-900 shadow-2xl w-[90%] laptop:w-1/2">
+                <div className="bg-neutral-900 border-2 relative flex h-3/4 justify-center items-center desktop:max-h-[600px] max-w-[900px] opacity-90 shadow-neutral-900 shadow-2xl w-[90%] laptop:w-1/2">
+                  <a href="/home" className='absolute top-2 left-2 text-lg laptop:text-2xl'>&lt;--</a>
                     <form className="bg-transparent flex flex-col gap-8 h-[70%] tablet:h-4/5 items-center justify-center tablet:text-lg w-[95%]" onSubmit={handleSubmit}>
                         <label className="text-3xl tablet:text-4xl">Edit Profile</label>
                         <input required type="text" placeholder="Username" className="h-[10%] p-2 rounded-xl text-neutral-900 w-4/5" value={formData.username} onChange={handleUsernameChange}/>
@@ -173,7 +176,15 @@ export default function Register() {
                 </div>
             <div>
                 <button onClick={logOut} className="absolute bottom-0 tablet:bottom-5 right-0 h-16 bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 mx-2 rounded-xl w-1/3 tablet:w-1/5 max-w-xs">Log Out</button>
-                <button onClick={deleteProfile} className="absolute bottom-0 tablet:bottom-5 h-16 left-0 bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 mx-2 rounded-xl w-1/3 tablet:w-1/5 max-w-xs">Delete Profile</button>
+                <button onClick={() => setDeleteButton(true)} className="absolute bottom-0 tablet:bottom-5 h-16 left-0 bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 mx-2 rounded-xl w-1/3 tablet:w-1/5 max-w-xs">Delete Profile</button>
+                {deleteButton && 
+                (<div className="absolute bottom-24 left-0 mx-2 flex flex-col gap-2 justify-center items-center w-1/3 tablet:w-1/5 max-w-xs">
+                  <p>Are you sure?</p>
+                  <div className="flex flex-row justify-center items-center gap-4">
+                    <button className="bg-red-500 w-16 h-8 rounded-xl" onClick={deleteProfile}>Yes</button>
+                    <button className="bg-neutral-600 w-16 h-8 rounded-xl" onClick={() => setDeleteButton(false)} >No</button>
+                  </div>
+                </div>)}
             </div>
         </div>
     )

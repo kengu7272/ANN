@@ -18,7 +18,7 @@ export default function Page() {
           <p>Click on the button below to login or get started on the register page.</p>
         </section>
         <section className="flex flex-col h-1/6 justify-center items-center rounded-xl w-full">
-          <a href="/login" className="text-2xl bg-neutral-700 flex justify-center items-center h-full rounded-xl w-3/5">Login</a>
+          <a href="/login" className="hover:bg-neutral-600 active:bg-neutral-800 text-2xl bg-neutral-700 flex justify-center items-center h-full rounded-xl w-3/5">Login</a>
         </section>
       </main>
     </div>
