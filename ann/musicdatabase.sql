@@ -36,10 +36,10 @@ CREATE TABLE playlists (
 );
 
 CREATE TABLE playlist_songs (
-    playlist_song_id INT AUTO_INCREMENT PRIMARY KEY,
     playlistid INT NOT NULL,
     songid INT NOT NULL,
 
+    PRIMARY KEY(playlistid, songid),
     KEY playlistid_idx (playlistid),
     KEY songid_idx (songid)
 );

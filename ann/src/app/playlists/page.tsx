@@ -1,9 +1,10 @@
 // playlists page
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '../components/navbar';
+import { SongArtistAlbum } from '../interfaces/songArtistAlbum';
 
 // These three for playlist fetch response object, component object
 interface PlaylistColumns {
@@ -36,13 +37,23 @@ interface PlaylistSongsResponseData {
     songs: PlaylistSongsColumns[];
 }
 
+interface ResponseData {
+    status: number;
+    error: string;
+    SongArtistAlbumArr: SongArtistAlbum[]
+}
+
 // Component that holds playlists list and generates songs list based on selected playlist
 const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     const [playlistNum, setPlaylistNum] = useState(-1);
     const [playlistName, setPlaylistName] = useState('');
-    const [addSong, setAddSong] = useState(false);
     const [playlistSongs, setPlaylistSongs] = useState<PlaylistSongsColumns[]>([]);
 
+    const [addSong, setAddSong] = useState(false);
+
+    const [searchResults, setSearchResults] = useState<SongArtistAlbum[]>([]);
+
+    // This function gets song based on selected playlist
     const getSongs = async (playlistid: number) => {
         try {
             const token: string = sessionStorage.getItem('token')!;
@@ -64,6 +75,55 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
         }
     }
 
+    // function to search songs
+    const searchSongs = async (event: FormEvent) => {
+        event.preventDefault();
+        setSearchResults([]); // should render behind search bar but just in case
+
+        const form: HTMLFormElement = event.target as HTMLFormElement;
+        const formData: FormData = new FormData(form);
+        const searchTerm: string = formData.get('searchTerm') as string;
+
+        try {
+            const response = await fetch('/api/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    searchTerm: searchTerm
+                })
+            })
+
+            const data: ResponseData = await response.json() as ResponseData
+
+            if(data.status === 207) {
+                setSearchResults(data.SongArtistAlbumArr);
+                setAddSong(false);
+            }
+            else {
+                console.log(data.error)
+            }
+        }
+        catch(error) {
+            if(error instanceof Error){
+                console.error(error.message);
+            }
+        }
+    }
+
+    const addToPlaylist = async () => {
+        try {
+
+        }
+        catch(error) {
+            if(error instanceof Error) {
+                console.error(error.message);
+            }
+        }
+    }
+
+    // if a playlist is selected + it isn't to add songs
     if(playlistNum != -1 && !addSong) {
         void getSongs(playlistNum)
     }
@@ -88,6 +148,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                     )}
                 </div>
             </div>
+
             <div className='mb-24 laptop:mb-0 w-full laptop:w-1/2 text-center'>
                 <p className='text-4xl mb-2'>Songs</p>
                 <div className='bg-neutral-900 border-2 0 flex flex-col h-[400px] laptop:h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
@@ -100,11 +161,19 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                     ) : addSong ? (
                         <div className='my-auto mx-auto text-xl flex flex-col gap-2'>
                             <p>Search and add songs to <span className='font-bold'>{playlistName}</span></p>
-                            <form className='flex flex-col justify-center items-center gap-4'>
-                                <input type="text" placeholder="Search" className='bg-neutral-600 p-1'></input>
+                            <form className='flex flex-col justify-center items-center gap-4' onSubmit={searchSongs}>
+                                <input name='searchTerm' type="text" placeholder="Search" className='bg-neutral-600 p-1'></input>
                                 <input className='bg-neutral-700 h-10 hover:bg-neutral-600 active:bg-neutral-800 mx-2 rounded-xl w-1/2' type="submit" value="Search"></input>
                             </form>
                         </div>
+                    ) : searchResults.length > 0 ? (
+                            searchResults.map((result: SongArtistAlbum, index: number) => (
+                                (<div className='even:bg-neutral-800 flex-none relative max-w[30%] h-16 flex flex-row px-2 items-center gap-8' key={index}>
+                                    <h3 className='absolute left-2'>{result.song.title}</h3>                                   
+                                    <p className='mx-auto'>{result.artist.name}</p>
+                                    <button className='p-2 bg-neutral-600 absolute right-2 rounded-xl'>Add</button>
+                                </div>)
+                            ))
                     ) : (
                         <p className='text-center px-2 my-auto'>No songs available</p>
                     )}
@@ -118,6 +187,7 @@ export default function Playlists() {
     const router = useRouter();
     const [playlists, setPlaylists] = useState<PlaylistColumns[]>([]);
 
+    // gathers user playlist once component mounts
     useEffect(() => {
         async function fetchPlaylists() {
             try {
