@@ -43,6 +43,11 @@ interface ResponseData {
     SongArtistAlbumArr: SongArtistAlbum[]
 }
 
+interface RequestData {
+    songData: SongArtistAlbum;
+    playlistNum: number;
+}
+
 // Component that holds playlists list and generates songs list based on selected playlist
 const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     const [playlistNum, setPlaylistNum] = useState(-1);
@@ -112,9 +117,21 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
         }
     }
 
-    const addToPlaylist = async () => {
+    const addToPlaylist = async (songData: SongArtistAlbum) => {
         try {
+            const req: RequestData = {songData, playlistNum}
 
+            const token = sessionStorage.getItem('token');
+            const response = await fetch('/api/playlistAdd', {
+                method: 'POST',
+                headers: {
+                    'Authorization': token!,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(req),
+            });
+
+            
         }
         catch(error) {
             if(error instanceof Error) {
@@ -171,7 +188,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                                 (<div className='even:bg-neutral-800 flex-none relative max-w[30%] h-16 flex flex-row px-2 items-center gap-8' key={index}>
                                     <h3 className='absolute left-2'>{result.song.title}</h3>                                   
                                     <p className='mx-auto'>{result.artist.name}</p>
-                                    <button className='p-2 bg-neutral-600 absolute right-2 rounded-xl'>Add</button>
+                                    <button onClick={void addToPlaylist(result)} className='p-2 bg-neutral-600 absolute right-2 rounded-xl'>Add</button>
                                 </div>)
                             ))
                     ) : (
