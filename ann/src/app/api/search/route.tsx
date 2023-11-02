@@ -7,10 +7,6 @@ interface RequestData {
 }
 
 export async function POST(req: Request) {
-    //
-    // todo implement search local database first, then give user option to search spotify
-    //
-
     const { searchTerm } = await req.json() as RequestData;
 
     const spotifyEndpoint = 'https://api.spotify.com/v1';
@@ -64,9 +60,11 @@ export async function POST(req: Request) {
         });
     }
     catch(error) {
-        return Response.json({
-            status: 500,
-            error: "Internal server error"
-        });
+        if(error instanceof Error) {
+            return Response.json({
+                status: 500,
+                error: error.message
+            });
+        }
     }
 }

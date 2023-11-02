@@ -58,6 +58,9 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
 
     const [searchResults, setSearchResults] = useState<SongArtistAlbum[]>([]);
 
+    const [responseMessage, setResponseMessage] = useState('');
+    const [responseStatus, setResponseStatus] = useState('');
+
     // This function gets song based on selected playlist
     const getSongs = async (playlistid: number) => {
         try {
@@ -83,7 +86,6 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     // function to search songs
     const searchSongs = async (event: FormEvent) => {
         event.preventDefault();
-        setSearchResults([]); // should render behind search bar but just in case
 
         const form: HTMLFormElement = event.target as HTMLFormElement;
         const formData: FormData = new FormData(form);
@@ -118,6 +120,8 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     }
 
     const addToPlaylist = async (songData: SongArtistAlbum) => {
+        setSearchResults([]);
+
         try {
             const req: RequestData = {songData, playlistNum}
 
@@ -130,8 +134,17 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                 },
                 body: JSON.stringify(req),
             });
-
             
+            const data = await response.json();
+
+            if(data.status === 207) {
+                setResponseStatus('success');
+                setResponseMessage(data.message);
+            }
+            else {
+                setResponseStatus('failure');
+                setResponseMessage(data.error);
+            }
         }
         catch(error) {
             if(error instanceof Error) {
@@ -142,11 +155,11 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
 
     // if a playlist is selected + it isn't to add songs
     if(playlistNum != -1 && !addSong) {
-        void getSongs(playlistNum)
+        void getSongs(playlistNum);
     }
 
     return (
-        <main className='w-4/5 flex flex-col laptop:flex-row gap-8 items-center justify-center'>
+        <main className='w-4/5 flex flex-col laptop:flex-row gap-8 h-[70%] laptop:h-fit items-center justify-center relative'>
             <div className='mt-[500px] laptop:mt-0 w-full laptop:w-1/2 text-center'>
                 <p className='text-4xl mb-2'>Playlists</p>
                 <div className='bg-neutral-900 border-2 0 flex flex-col h-[400px] laptop:h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
@@ -155,8 +168,8 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                             <div className='even:bg-neutral-800 relative flex flex-none items-center h-16 w-full px-2' key={playlist.playlistid}> 
                                 <p>{playlist.name}</p>
                                 <div className=' absolute right-4 flex flex-row gap-4 items-center justify-center'>
-                                    <button onClick={() => { setPlaylistNum(playlist.playlistid); setAddSong(false); }} className='active:text-neutral-400'>View</button>
-                                    <button onClick={() => {setAddSong(true); setPlaylistName(playlist.name);}} className='active:text-neutral-400'>Add</button>
+                                    <button onClick={() => { setPlaylistNum(playlist.playlistid); setAddSong(false); setSearchResults([]);}} className='active:text-neutral-400'>View</button>
+                                    <button onClick={() => {setAddSong(true); setPlaylistNum(playlist.playlistid); setPlaylistName(playlist.name); setSearchResults([]); setPlaylistSongs([]);}} className='active:text-neutral-400'>Add</button>
                                 </div>
                             </div>
                         ))
@@ -188,7 +201,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                                 (<div className='even:bg-neutral-800 flex-none relative max-w[30%] h-16 flex flex-row px-2 items-center gap-8' key={index}>
                                     <h3 className='absolute left-2'>{result.song.title}</h3>                                   
                                     <p className='mx-auto'>{result.artist.name}</p>
-                                    <button onClick={void addToPlaylist(result)} className='p-2 bg-neutral-600 absolute right-2 rounded-xl'>Add</button>
+                                    <button onClick={() => (void addToPlaylist(result))} className='p-2 bg-neutral-600 absolute right-2 rounded-xl'>Add</button>
                                 </div>)
                             ))
                     ) : (
@@ -196,6 +209,9 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                     )}
                 </div>
             </div>
+
+            {responseStatus == 'success' && (<div className='text-green-500 absolute top-0'>{responseMessage}</div>)}
+            {responseStatus == 'failure' && (<div className='text-red-500 absolute top-0'>{responseMessage}</div>)}
         </main>
     );
 }
