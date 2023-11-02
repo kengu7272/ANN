@@ -175,6 +175,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
             if(data.status === 207) {
                 setResponseStatus('success');
                 setResponseMessage(data.message);
+                void getSongs(playlistNum);
             }
             else {
                 setResponseStatus('failure');
