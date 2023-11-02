@@ -88,6 +88,9 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     const searchSongs = async (event: FormEvent) => {
         event.preventDefault();
 
+        setSearchResults([]); 
+        setPlaylistSongs([]);
+
         const form: HTMLFormElement = event.target as HTMLFormElement;
         const formData: FormData = new FormData(form);
         const searchTerm: string = formData.get('searchTerm') as string;
@@ -147,6 +150,42 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                 setResponseStatus('failure');
                 setResponseMessage(data.error);
             }
+
+            setAddSong(true);
+        }
+        catch(error) {
+            if(error instanceof Error) {
+                console.error(error.message);
+            }
+        }
+    }
+
+    const deleteFromPlaylist = async (songid: number) => {
+        try {
+            const token: string = sessionStorage.getItem('token')!;
+            const response = await fetch("/api/playlists/delete", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify({
+                    songid: songid,
+                    playlistid: playlistNum
+                })
+            })
+
+            const data = await response.json() as { status: number; error: string; message: string;}
+
+            if(data.status === 207) {
+                setResponseStatus('success');
+                setResponseMessage(data.message);
+                void getSongs(playlistNum);
+            }
+            else {
+                setResponseStatus('failure');
+                setResponseMessage(data.error);
+            }
         }
         catch(error) {
             if(error instanceof Error) {
@@ -162,7 +201,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     }, [playlistNum]);
 
     return (
-        <main className='w-4/5 laptop:w-[95%] flex flex-col laptop:flex-row gap-8 h-[70%] laptop:h-fit items-center justify-center relative'>
+        <main className='w-[95%] flex flex-col laptop:flex-row gap-8 h-[70%] laptop:h-fit items-center justify-center relative'>
             <div className='mt-[500px] laptop:mt-0 w-full laptop:w-1/2 text-center'>
                 <p className='text-4xl mb-2'>Playlists</p>
                 <div className='bg-neutral-900 border-2 0 flex flex-col h-[400px] laptop:h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
@@ -185,18 +224,18 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
             <div className='mb-24 laptop:mb-0 w-full laptop:w-1/2 text-center'>
                 <p className='text-4xl mb-2'>Songs</p>
                 <div className='bg-neutral-900 border-2 0 flex flex-col h-[400px] laptop:h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
-                    {playlistNum != -1 && (playlistSongs && playlistSongs.length > 0) ? (
+                    {!addSong && playlistNum != -1 && (playlistSongs && playlistSongs.length > 0) ? (
                         playlistSongs.map((song, index: number) => (
-                            <div className='relative even:bg-neutral-800 active:bg-neutral-600 flex flex-row gap-4 justify-end flex-none items-center h-24 w-full px-2' key={song.songid}> 
-                                <div className='absolute left-2 max-w-[55%] flex flex-col gap-1 justify-center'>
+                            <div className='relative even:bg-neutral-800 flex flex-row gap-4 justify-end flex-none items-center h-24 w-full px-2' key={song.songid}> 
+                                <div className='absolute left-2 max-w-[70%] laptop:max-w-[50%] flex flex-col gap-1 justify-center truncate'>
                                     <div className='items-center gap-2 flex'>
                                         <div>{index + 1}</div>
                                         <p className='text-left'>{song.title}</p>
                                     </div>
                                     <div className='font-bold text-left'>{song.artist}</div>
                                 </div>
-                                <div className='mr-20 hidden tablet:flex max-w-[40%] text-sm'>{song.album}</div>
-                                <button className='absolute right-4 bg-red-800 w-12 h-8 rounded-xl'>X</button>
+                                <div className='mr-20 hidden tablet:flex max-w-[40%] text-sm truncate'>{song.album}</div>
+                                <button onClick={() => {void deleteFromPlaylist(song.songid)}} className='absolute right-4 bg-red-800 w-12 h-8 rounded-xl'>X</button>
                             </div>
                         ))
                     ) : addSong ? (
@@ -209,11 +248,15 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                         </div>
                     ) : searchResults.length > 0 ? (
                             searchResults.map((result: SongArtistAlbum, index: number) => (
-                                (<div className='even:bg-neutral-800 flex-none relative max-w[30%] h-20 flex flex-row px-2 items-center gap-8' key={index}>
-                                    <div className='absolute left-2 flex flex-col justify-center max-w-[85%]'>
-                                        <h3>{result.song.title}</h3>                                   
-                                        <p className='mx-aut text-left font-bold'>{result.artist.name}</p>
+                                (<div className='relative even:bg-neutral-800 flex flex-row gap-4 justify-end flex-none items-center h-24 w-full px-2' key={index}> 
+                                <div className='absolute left-2 max-w-[70%] laptop:max-w-[50%]flex flex-col gap-1 justify-center truncate'>
+                                    <div className='items-center gap-2 flex'>
+                                        <div>{index + 1}</div>
+                                        <p className='text-left'>{result.song.title}</p>
                                     </div>
+                                    <div className='font-bold text-left'>{result.artist.name}</div>
+                                </div>
+                                <div className='mr-20 hidden tablet:flex max-w-[40%] text-sm truncate'>{result.album.name}</div>
                                     <button onClick={() => (void addToPlaylist(result))} className='p-2 bg-neutral-600 absolute right-2 rounded-xl'>Add</button>
                                 </div>)
                             ))
