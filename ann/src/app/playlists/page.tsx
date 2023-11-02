@@ -210,7 +210,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                     ) : searchResults.length > 0 ? (
                             searchResults.map((result: SongArtistAlbum, index: number) => (
                                 (<div className='even:bg-neutral-800 flex-none relative max-w[30%] h-20 flex flex-row px-2 items-center gap-8' key={index}>
-                                    <div className='absolute left-2 flex flex-col justify-center max-w-[85%]'>
+                                    <div className='absolute left-2 flex flex-col justify-center max-w-[85%] text-left'>
                                         <h3>{result.song.title}</h3>                                   
                                         <p className='mx-aut text-left font-bold'>{result.artist.name}</p>
                                     </div>
