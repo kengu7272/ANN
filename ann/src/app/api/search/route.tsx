@@ -2,6 +2,8 @@
 
 import { Song, Artist, Album, SongArtistAlbum } from "../../interfaces/songArtistAlbum";
 
+export const dynamic = "force-dynamic"
+
 interface RequestData {
     searchTerm: string;
 }
