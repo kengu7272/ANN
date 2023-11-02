@@ -71,6 +71,14 @@ export async function POST(req: Request) {
         }
         else if(action == 'delete') {
             await db.execute(
+                `DELETE FROM playlist_songs
+                WHERE playlistid IN (SELECT playlistid
+                FROM playlists
+                WHERE userid = ?)`,
+                [userid]
+            )
+
+            await db.execute(
                 'DELETE FROM playlists WHERE userid = ?',
                 [userid]
               );

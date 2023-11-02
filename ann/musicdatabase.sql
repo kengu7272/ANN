@@ -1,6 +1,6 @@
 CREATE TABLE artists(
     artistid INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
+    name VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE users(
@@ -12,7 +12,10 @@ CREATE TABLE users(
 
 CREATE TABLE albums(
     albumid INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
+    artistid INT,
+    name VARCHAR(50) NOT NULL,
+
+    KEY artistid_idx (artistid)
 );
 
 CREATE TABLE songs(
@@ -36,10 +39,10 @@ CREATE TABLE playlists (
 );
 
 CREATE TABLE playlist_songs (
-    playlist_song_id INT AUTO_INCREMENT PRIMARY KEY,
     playlistid INT NOT NULL,
     songid INT NOT NULL,
 
+    PRIMARY KEY(playlistid, songid),
     KEY playlistid_idx (playlistid),
     KEY songid_idx (songid)
 );
