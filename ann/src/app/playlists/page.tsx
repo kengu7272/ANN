@@ -187,7 +187,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                 <div className='bg-neutral-900 border-2 0 flex flex-col h-[400px] laptop:h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
                     {playlistNum != -1 && (playlistSongs && playlistSongs.length > 0) ? (
                         playlistSongs.map((song, index: number) => (
-                            <div className='relative even:bg-neutral-800 active:bg-neutral-600 flex flex-row gap-4 justify-end flex-none items-center h-24 w-full px-2' key={song.songid}> 
+                            <div className='relative even:bg-neutral-800 flex flex-row gap-4 justify-end flex-none items-center h-24 w-full px-2' key={song.songid}> 
                                 <div className='absolute left-2 max-w-[55%] flex flex-col gap-1 justify-center'>
                                     <div className='items-center gap-2 flex'>
                                         <div>{index + 1}</div>
