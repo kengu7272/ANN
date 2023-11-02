@@ -209,9 +209,11 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                         </div>
                     ) : searchResults.length > 0 ? (
                             searchResults.map((result: SongArtistAlbum, index: number) => (
-                                (<div className='even:bg-neutral-800 flex-none relative max-w[30%] h-16 flex flex-row px-2 items-center gap-8' key={index}>
-                                    <h3 className='absolute left-2'>{result.song.title}</h3>                                   
-                                    <p className='mx-auto'>{result.artist.name}</p>
+                                (<div className='even:bg-neutral-800 flex-none relative max-w[30%] h-20 flex flex-row px-2 items-center gap-8' key={index}>
+                                    <div className='absolute left-2 flex flex-col justify-center max-w-[85%]'>
+                                        <h3>{result.song.title}</h3>                                   
+                                        <p className='mx-aut text-left font-bold'>{result.artist.name}</p>
+                                    </div>
                                     <button onClick={() => (void addToPlaylist(result))} className='p-2 bg-neutral-600 absolute right-2 rounded-xl'>Add</button>
                                 </div>)
                             ))
