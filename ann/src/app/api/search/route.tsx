@@ -6,6 +6,21 @@ interface RequestData {
     searchTerm: string;
 }
 
+interface SpotifyResponse {
+    tracks: {
+        items: {
+            name: string;
+            duration_ms: number;
+            album: {
+                name: string;
+            }
+            artists: {
+                name: string;
+            }[]
+        }[]
+    }
+}
+
 export async function POST(req: Request) {
     const { searchTerm } = await req.json() as RequestData;
 
@@ -23,8 +38,8 @@ export async function POST(req: Request) {
             body: 'grant_type=client_credentials'
         });
 
-        let data = await tokenResponse.json();
-        const accessToken = data.access_token;
+        const data: { access_token: string} = await tokenResponse.json() as {access_token: string};
+        const accessToken: string = data.access_token;
 
         const query: string = encodeURIComponent(searchTerm);
         const response = await fetch(spotifyEndpoint + '/search?q=' + query + "&type=track&limit=10", {
@@ -34,18 +49,18 @@ export async function POST(req: Request) {
             }
         })
 
-        data = await response.json();
+        const spotifyData: SpotifyResponse = await response.json() as SpotifyResponse;
 ;
-        if(data.length === 0) {
+        if(spotifyData.tracks.items.length === 0) {
             return Response.json({
                 status: 408,
                 error: 'No search results'
             })
         }
 
-        let songArtistAlbumArr: SongArtistAlbum[] = [];
+        const songArtistAlbumArr: SongArtistAlbum[] = [];
 
-        data.tracks.items.forEach((track: any) => {
+        spotifyData.tracks.items.forEach((track:  SpotifyResponse['tracks']['items'][number]) => {
             const song: Song = {title: track.name, durationSeconds: (track.duration_ms / 1000)};
             const album: Album = {name: track.album.name};
             const artist: Artist = {name: track.artists[0].name};

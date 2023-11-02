@@ -136,12 +136,12 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                 body: JSON.stringify(req),
             });
             
-            const data = await response.json();
+            const data = await response.json() as {status: number; message: string; error: string};
 
             if(data.status === 207) {
                 setResponseStatus('success');
                 setResponseMessage(data.message);
-                getSongs(playlistNum);
+                void getSongs(playlistNum);
             }
             else {
                 setResponseStatus('failure');
