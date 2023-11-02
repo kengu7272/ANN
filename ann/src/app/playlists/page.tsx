@@ -27,7 +27,9 @@ interface PlaylistResponseData {
 // These two for playlist songs fetch response object
 interface PlaylistSongsColumns {
     songid: number;
-    songTitle: string;
+    title: string;
+    artist: string;
+    album: string;
 }
 
 interface PlaylistSongsResponseData {
@@ -66,13 +68,12 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
         try {
             const token: string = sessionStorage.getItem('token')!;
             const response: Response = await fetch("/api/playlists/playlistsongs", {
-                method: 'GET',
+                method: 'POST',
                 headers: {
-                    'Authorization': token
+                    'Authorization': token,
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    playlistid: playlistid
-                })
+                body: JSON.stringify({playlistid: playlistid})
             });
 
             const data: PlaylistSongsResponseData = await response.json() as PlaylistSongsResponseData;
@@ -140,6 +141,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
             if(data.status === 207) {
                 setResponseStatus('success');
                 setResponseMessage(data.message);
+                getSongs(playlistNum);
             }
             else {
                 setResponseStatus('failure');
@@ -153,13 +155,14 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
         }
     }
 
-    // if a playlist is selected + it isn't to add songs
-    if(playlistNum != -1 && !addSong) {
-        void getSongs(playlistNum);
-    }
+    useEffect(() => {
+        if (playlistNum !== -1 && !addSong) {
+            void getSongs(playlistNum);
+          }
+    }, [playlistNum]);
 
     return (
-        <main className='w-4/5 flex flex-col laptop:flex-row gap-8 h-[70%] laptop:h-fit items-center justify-center relative'>
+        <main className='w-4/5 laptop:w-[95%] flex flex-col laptop:flex-row gap-8 h-[70%] laptop:h-fit items-center justify-center relative'>
             <div className='mt-[500px] laptop:mt-0 w-full laptop:w-1/2 text-center'>
                 <p className='text-4xl mb-2'>Playlists</p>
                 <div className='bg-neutral-900 border-2 0 flex flex-col h-[400px] laptop:h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
@@ -182,10 +185,18 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
             <div className='mb-24 laptop:mb-0 w-full laptop:w-1/2 text-center'>
                 <p className='text-4xl mb-2'>Songs</p>
                 <div className='bg-neutral-900 border-2 0 flex flex-col h-[400px] laptop:h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
-                    {playlistNum != -1 && playlistSongs.length > 0 ? (
-                        playlistSongs.map((song) => (
-                            <div className='even:bg-neutral-800 active:bg-neutral-600 flex flex-none items-center h-16 w-full px-2' key={song.songid}> 
-                                {song.songTitle}
+                    {playlistNum != -1 && (playlistSongs && playlistSongs.length > 0) ? (
+                        playlistSongs.map((song, index: number) => (
+                            <div className='relative even:bg-neutral-800 active:bg-neutral-600 flex flex-row gap-4 justify-end flex-none items-center h-24 w-full px-2' key={song.songid}> 
+                                <div className='absolute left-2 max-w-[55%] flex flex-col gap-1 justify-center'>
+                                    <div className='items-center gap-2 flex'>
+                                        <div>{index + 1}</div>
+                                        <p className='text-left'>{song.title}</p>
+                                    </div>
+                                    <div className='font-bold text-left'>{song.artist}</div>
+                                </div>
+                                <div className='mr-20 hidden tablet:flex max-w-[40%] text-sm'>{song.album}</div>
+                                <button className='absolute right-4 bg-red-800 w-12 h-8 rounded-xl'>X</button>
                             </div>
                         ))
                     ) : addSong ? (
