@@ -41,9 +41,16 @@ export async function POST(req: Request) {
             })
         }
 
+        await db.execute(
+            `DELETE FROM playlist_songs
+            WHERE playlistid = ? AND
+            songid = ?`,
+            [playlistid, songid]
+        );
+
         return Response.json({
             status: 207,
-            message: "success"
+            message: "Song successfully removed from playlist"
         })
     }
     catch(error) {

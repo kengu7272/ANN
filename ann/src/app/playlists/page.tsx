@@ -155,6 +155,39 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
         }
     }
 
+    const deleteFromPlaylist = async (songid: number) => {
+        try {
+            const token: string = sessionStorage.getItem('token')!;
+            const response = await fetch("/api/playlists/delete", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token
+                },
+                body: JSON.stringify({
+                    songid: songid,
+                    playlistid: playlistNum
+                })
+            })
+
+            const data = await response.json() as { status: number; error: string; message: string;}
+
+            if(data.status === 207) {
+                setResponseStatus('success');
+                setResponseMessage(data.message);
+            }
+            else {
+                setResponseStatus('failure');
+                setResponseMessage(data.error);
+            }
+        }
+        catch(error) {
+            if(error instanceof Error) {
+                console.error(error.message);
+            }
+        }
+    }
+
     useEffect(() => {
         if (playlistNum !== -1 && !addSong) {
             void getSongs(playlistNum);
@@ -196,7 +229,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                                     <div className='font-bold text-left'>{song.artist}</div>
                                 </div>
                                 <div className='mr-20 hidden tablet:flex max-w-[40%] text-sm'>{song.album}</div>
-                                <button className='absolute right-4 bg-red-800 w-12 h-8 rounded-xl'>X</button>
+                                <button onClick={() => {deleteFromPlaylist(song.songid)}} className='absolute right-4 bg-red-800 w-12 h-8 rounded-xl'>X</button>
                             </div>
                         ))
                     ) : addSong ? (
