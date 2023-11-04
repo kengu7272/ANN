@@ -7,7 +7,6 @@ import { headers } from 'next/headers';
 import { RowDataPacket, FieldPacket } from 'mysql2';
 import { SongArtistAlbum } from '@/app/interfaces/songArtistAlbum';
 import getLyrics from 'genius-lyrics-ts';
-import { lyricsParser } from '../publicFunctions/lyricsParser';
 
 interface RequestData {
     playlistNum: number;
@@ -100,10 +99,8 @@ export async function POST(req: Request) {
         if(rows.length === 0) {
             // get lyrics
             let lyrics = await getLyrics({title: songData.song.title, artist: songData.artist.name});
-            if (lyrics) {
-                lyrics = lyrics?.substring(0, lyrics.indexOf("Source: LyricFind"))!;
-            }
-            else {
+
+            if(!lyrics) {
                 lyrics = "";
             }
 
@@ -111,7 +108,6 @@ export async function POST(req: Request) {
             const musicVideoResponse = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${process.env.YOUTUBE_KEY}&part=snippet&q=${songData.song.title}%20${songData.artist.name}%20Music%20Video&type=video`);
             
             const musicVideoData = await musicVideoResponse.json();
-            console.log(musicVideoData);
 
             let videoLink = '';
             if (musicVideoData.items && musicVideoData.items.length > 0) {
