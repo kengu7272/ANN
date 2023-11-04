@@ -210,7 +210,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                             <div className='even:bg-neutral-800 relative flex flex-none items-center h-16 w-full px-2' key={playlist.playlistid}> 
                                 <p>{playlist.name}</p>
                                 <div className=' absolute right-4 flex flex-row gap-4 items-center justify-center'>
-                                    <button onClick={() => { setPlaylistNum(playlist.playlistid); setAddSong(false); setSearchResults([]);}} className='active:text-neutral-400'>View</button>
+                                    <button onClick={() => { setPlaylistNum(playlist.playlistid); void getSongs(playlistNum); setAddSong(false); setSearchResults([]);}} className='active:text-neutral-400'>View</button>
                                     <button onClick={() => {setAddSong(true); setPlaylistNum(playlist.playlistid); setPlaylistName(playlist.name); setSearchResults([]); setPlaylistSongs([]);}} className='active:text-neutral-400'>Add</button>
                                 </div>
                             </div>

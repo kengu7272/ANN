@@ -6,10 +6,17 @@ import JwtPayload from "../payload"
 import { headers } from 'next/headers';
 import { RowDataPacket, FieldPacket } from 'mysql2';
 import { SongArtistAlbum } from '@/app/interfaces/songArtistAlbum';
+import getLyrics from 'genius-lyrics-ts';
+import { lyricsParser } from '../publicFunctions/lyricsParser';
 
 interface RequestData {
     playlistNum: number;
     songData: SongArtistAlbum;
+}
+
+interface YouTubeVideo {
+    id: { videoId: string };
+    snipped: { title: string };
 }
 
 export async function POST(req: Request) {
@@ -45,9 +52,6 @@ export async function POST(req: Request) {
                 error: "Could not find user or playlist error"
             })
         }
-
-        // todo implement:
-        // add song to playlist_songs
 
         // check if artist exist in database if not add - basic system, assumes no duplicate names
         [rows, fields] = await db.query(
@@ -94,14 +98,38 @@ export async function POST(req: Request) {
             [songData.song.title, songData.artist.name]
         );
         if(rows.length === 0) {
+            // get lyrics
+            let lyrics = await getLyrics({title: songData.song.title, artist: songData.artist.name});
+            if (lyrics) {
+                lyrics = lyrics?.substring(0, lyrics.indexOf("Source: LyricFind"))!;
+            }
+            else {
+                lyrics = "";
+            }
+
+            // look for youtube music video link
+            const musicVideoResponse = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${process.env.YOUTUBE_KEY}&part=snippet&q=${songData.song.title}%20${songData.artist.name}%20Music%20Video&type=video`);
+            
+            const musicVideoData = await musicVideoResponse.json();
+            console.log(musicVideoData);
+
+            let videoLink = '';
+            if (musicVideoData.items && musicVideoData.items.length > 0) {
+                const firstVideo: YouTubeVideo = musicVideoData.items[0];
+                const videoId = firstVideo.id.videoId;
+        
+                // Generate the link for the video
+                videoLink = `https://www.youtube.com/watch?v=${videoId}`;
+            }
+
             await db.query(
                 `INSERT INTO songs
-                (title, artistid, albumid, durationSeconds)
+                (title, artistid, albumid, durationSeconds, lyrics, videoLink)
                 VALUES(?,
                     (SELECT artistid FROM artists WHERE name = ?),
                     (SELECT albumid FROM albums WHERE name = ?),
-                    ?)`,
-                [songData.song.title, songData.artist.name, songData.album.name, songData.song.durationSeconds]
+                    ?, ?, ?)`,
+                [songData.song.title, songData.artist.name, songData.album.name, songData.song.durationSeconds, lyrics, videoLink]
             )
         };
 
