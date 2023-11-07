@@ -30,6 +30,7 @@ interface PlaylistSongsColumns {
     title: string;
     artist: string;
     album: string;
+    video: string;
 }
 
 interface PlaylistSongsResponseData {
@@ -234,7 +235,8 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                                     </div>
                                     <div className='font-bold text-left'>{song.artist}</div>
                                 </div>
-                                <div className='mr-20 hidden tablet:flex max-w-[40%] text-sm truncate'>{song.album}</div>
+                                <div className='mr-2 hidden tablet:flex max-w-[40%] text-sm truncate font-bold'>{song.album}</div>
+                                <a className='mr-20 bg-blue-400 w-12 h-8 rounded-xl flex items-center justify-center' target="_blank" href={song.video}>video</a>
                                 <button onClick={() => {void deleteFromPlaylist(song.songid)}} className='absolute right-4 bg-red-800 w-12 h-8 rounded-xl'>X</button>
                             </div>
                         ))
