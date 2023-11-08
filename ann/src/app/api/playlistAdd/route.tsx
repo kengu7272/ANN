@@ -109,14 +109,14 @@ export async function POST(req: Request) {
             
             const musicVideoData = await musicVideoResponse.json() as { items: YouTubeVideo[] };
 
+            console.log(musicVideoData);
             let videoLink = '';
-            if (musicVideoData.items && musicVideoData.items.length > 0) {
-                const firstVideo: YouTubeVideo = musicVideoData.items[0];
-                const videoId = firstVideo.id.videoId;
+            const firstVideo: YouTubeVideo = musicVideoData.items[0];
+            const videoId = firstVideo.id.videoId;
         
-                // Generate the link for the video
-                videoLink = `https://www.youtube.com/watch?v=${videoId}`;
-            }
+            // Generate the link for the video
+            videoLink = 'https://www.youtube.com/watch?v=' + videoId;
+            
 
             await db.query(
                 `INSERT INTO songs
@@ -141,11 +141,13 @@ export async function POST(req: Request) {
                 [playlistNum, songData.song.title, songData.artist.name]
             )
         }
-        catch {
-            return Response.json({
-                status: 409,
-                error: "Error inserting into playlist"
-            })
+        catch(error) {
+            if(error instanceof Error) {
+                return Response.json({
+                    status: 409,
+                    error: error.message
+                })
+            }
         }
 
 
