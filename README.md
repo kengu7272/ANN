@@ -13,8 +13,8 @@ MySQL: Hosted on PlanetScale
 - Registration/login system - implemented
 - Profile editor/manager  - implemented
 - Create playlist + display playlists - implemented
-- Song search - needs implemented - need to decide if use Spotify/MusicBrainz
-- Music video search - needs implemented - plan on using YouTube API
+- Song search - implemented
+- Music video search - implemented
 - Music Trivia - needs implemented
 
 ## View The Site  
@@ -24,6 +24,6 @@ https://ann-snowy.vercel.app/
 1. Registering an account with password check
 2. Logging in and being issued a jsonwebtoken for authentication
 3. Editing account details or deleting account
-4. Creating playlists and displaying playlist (will be implementing adding songs to them very soon)
+4. Creating playlists, add songs, delete songs, view youtube video for song, and display playlist 
 
 
