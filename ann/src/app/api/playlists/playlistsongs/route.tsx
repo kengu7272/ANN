@@ -26,7 +26,7 @@ export async function POST(req: Request) {
         const { playlistid } = await req.json() as RequestData;
 
         const [playlistsongs, fields]: [RowDataPacket[], FieldPacket[]] = await db.query(
-            `SELECT songs.songid, songs.title as title, artists.name as artist, albums.name as album
+            `SELECT songs.songid, songs.title as title, artists.name as artist, albums.name as album, songs.videoLink as video
             FROM playlists JOIN playlist_songs 
             ON playlists.playlistid = playlist_songs.playlistid JOIN songs
             ON playlist_songs.songid = songs.songid JOIN artists

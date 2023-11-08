@@ -41,6 +41,7 @@ export async function POST(req: Request) {
             })
         }
 
+        // delete song from playlist - don't delete song from database bc what if other user has that song in theirs
         await db.execute(
             `DELETE FROM playlist_songs
             WHERE playlistid = ? AND

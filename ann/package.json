@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@brandond/findthelyrics": "^2.0.5",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+    "genius-api": "^0.4.1",
+    "genius-lyrics-ts": "^0.2.4",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.6.1",
     "next": "^13.5.4",

@@ -30,6 +30,7 @@ interface PlaylistSongsColumns {
     title: string;
     artist: string;
     album: string;
+    video: string;
 }
 
 interface PlaylistSongsResponseData {
@@ -210,7 +211,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                             <div className='even:bg-neutral-800 relative flex flex-none items-center h-16 w-full px-2' key={playlist.playlistid}> 
                                 <p>{playlist.name}</p>
                                 <div className=' absolute right-4 flex flex-row gap-4 items-center justify-center'>
-                                    <button onClick={() => { setPlaylistNum(playlist.playlistid); setAddSong(false); setSearchResults([]);}} className='active:text-neutral-400'>View</button>
+                                    <button onClick={() => { setPlaylistNum(playlist.playlistid); void getSongs(playlistNum); setAddSong(false); setSearchResults([]);}} className='active:text-neutral-400'>View</button>
                                     <button onClick={() => {setAddSong(true); setPlaylistNum(playlist.playlistid); setPlaylistName(playlist.name); setSearchResults([]); setPlaylistSongs([]);}} className='active:text-neutral-400'>Add</button>
                                 </div>
                             </div>
@@ -234,7 +235,8 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                                     </div>
                                     <div className='font-bold text-left'>{song.artist}</div>
                                 </div>
-                                <div className='mr-20 hidden tablet:flex max-w-[40%] text-sm truncate'>{song.album}</div>
+                                <div className='mr-2 hidden tablet:flex max-w-[40%] text-sm truncate font-bold'>{song.album}</div>
+                                <a className='mr-20 bg-blue-400 w-12 h-8 rounded-xl flex items-center justify-center' target="_blank" href={song.video}>video</a>
                                 <button onClick={() => {void deleteFromPlaylist(song.songid)}} className='absolute right-4 bg-red-800 w-12 h-8 rounded-xl'>X</button>
                             </div>
                         ))
