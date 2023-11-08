@@ -5,9 +5,25 @@ import Navbar from '../components/navbar';
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from 'react';
 
+interface Question {
+    question: string;
+    answer: string;
+}
+
 export default function Home() {
     const [token, setToken] = useState('');
     const router = useRouter();
+
+    const getQuestion = async() => {
+        const response = await fetch('/api/home', {
+            method: 'GET',
+            headers: {
+                'Authorization': token
+            }
+        });
+
+        //const data = await response.json();
+    }
 
     useEffect(() => {
         const token = sessionStorage.getItem('token');
@@ -17,6 +33,9 @@ export default function Home() {
         }
 
         setToken(token);
+
+        // send request to get trivia question when visiting page
+        void getQuestion();
     }, []);
 
     return (

@@ -107,7 +107,7 @@ export async function POST(req: Request) {
             // look for youtube music video link
             const musicVideoResponse = await fetch(`https://www.googleapis.com/youtube/v3/search?key=${process.env.YOUTUBE_KEY}&part=snippet&q=${songData.song.title}%20${songData.artist.name}%20Music%20Video&type=video`);
             
-            const musicVideoData = await musicVideoResponse.json();
+            const musicVideoData = await musicVideoResponse.json() as { items: YouTubeVideo[] };
 
             let videoLink = '';
             if (musicVideoData.items && musicVideoData.items.length > 0) {
