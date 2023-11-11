@@ -64,6 +64,8 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     const [responseMessage, setResponseMessage] = useState('');
     const [responseStatus, setResponseStatus] = useState('');
 
+    const[view, setView] = useState(false);
+
     // This function gets song based on selected playlist
     const getSongs = async (playlistid: number) => {
         try {
@@ -199,7 +201,7 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
         if (playlistNum !== -1 && !addSong) {
             void getSongs(playlistNum);
           }
-    }, [playlistNum]);
+    }, [playlistNum, view]);
 
     return (
         <main className='w-[95%] flex flex-col laptop:flex-row gap-8 h-[70%] laptop:h-fit items-center justify-center relative'>
@@ -211,8 +213,8 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                             <div className='even:bg-neutral-800 relative flex flex-none items-center h-16 w-full px-2' key={playlist.playlistid}> 
                                 <p>{playlist.name}</p>
                                 <div className=' absolute right-4 flex flex-row gap-4 items-center justify-center'>
-                                    <button onClick={() => { setPlaylistNum(playlist.playlistid); void getSongs(playlistNum); setAddSong(false); setSearchResults([]);}} className='active:text-neutral-400'>View</button>
-                                    <button onClick={() => {setAddSong(true); setPlaylistNum(playlist.playlistid); setPlaylistName(playlist.name); setSearchResults([]); setPlaylistSongs([]);}} className='active:text-neutral-400'>Add</button>
+                                    <button onClick={() => { setPlaylistNum(playlist.playlistid); setAddSong(false); setSearchResults([]); setView(true);}} className='active:text-neutral-400'>View</button>
+                                    <button onClick={() => {setAddSong(true); setView(false); setPlaylistNum(playlist.playlistid); setPlaylistName(playlist.name); setSearchResults([]); setPlaylistSongs([]);}} className='active:text-neutral-400'>Add</button>
                                 </div>
                             </div>
                         ))
