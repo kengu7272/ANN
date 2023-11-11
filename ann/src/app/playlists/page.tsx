@@ -204,8 +204,8 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     }, [playlistNum, view]);
 
     return (
-        <main className='w-[95%] flex flex-col laptop:flex-row gap-8 h-[70%] laptop:h-fit items-center justify-center relative'>
-            <div className='mt-[500px] laptop:mt-0 w-full laptop:w-1/2 text-center'>
+        <main className='w-[95%] flex flex-col laptop:flex-row gap-8 h-[70%] items-center justify-center relative'>
+            <div className='mt-32 laptop:mt-0 w-full laptop:w-1/2 text-center'>
                 <p className='text-4xl mb-2'>Playlists</p>
                 <div className='bg-neutral-900 border-2 0 flex flex-col h-[400px] laptop:h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
                     {playlists.length > 0 ? (
@@ -226,11 +226,11 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
 
             <div className='mb-24 laptop:mb-0 w-full laptop:w-1/2 text-center'>
                 <p className='text-4xl mb-2'>Songs</p>
-                <div className='bg-neutral-900 border-2 0 flex flex-col h-[400px] laptop:h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
+                <div className='bg-neutral-900 border-2 0 flex flex-col h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
                     {!addSong && playlistNum != -1 && (playlistSongs && playlistSongs.length > 0) ? (
                         playlistSongs.map((song, index: number) => (
                             <div className='relative even:bg-neutral-800 flex flex-row gap-4 justify-end flex-none items-center h-24 w-full px-2' key={song.songid}> 
-                                <div className='absolute left-2 max-w-[70%] laptop:max-w-[50%] flex flex-col gap-1 justify-center truncate'>
+                                <div className='absolute left-2 max-w-[60%] laptop:max-w-[50%] flex flex-col gap-1 justify-center truncate'>
                                     <div className='items-center gap-2 flex'>
                                         <div>{index + 1}</div>
                                         <p className='text-left'>{song.title}</p>
@@ -238,8 +238,8 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                                     <div className='font-bold text-left'>{song.artist}</div>
                                 </div>
                                 <div className='mr-2 hidden tablet:flex max-w-[40%] text-sm truncate font-bold'>{song.album}</div>
-                                <a className='mr-20 bg-blue-400 w-12 h-8 rounded-xl flex items-center justify-center' target="_blank" href={song.video}>video</a>
-                                <button onClick={() => {void deleteFromPlaylist(song.songid)}} className='absolute right-4 bg-red-800 w-12 h-8 rounded-xl'>X</button>
+                                <a className='mr-14 tablet:mr-20 bg-blue-400 w-12 h-8 rounded-xl px-2 flex items-center justify-center' target="_blank" href={song.video}>video</a>
+                                <button onClick={() => {void deleteFromPlaylist(song.songid)}} className='absolute right-2 tablet:right-4 bg-red-800 w-12 h-8 rounded-xl'>X</button>
                             </div>
                         ))
                     ) : addSong ? (
@@ -270,8 +270,8 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                 </div>
             </div>
 
-            {responseStatus == 'success' && (<div className='text-green-500 absolute top-0'>{responseMessage}</div>)}
-            {responseStatus == 'failure' && (<div className='text-red-500 absolute top-0'>{responseMessage}</div>)}
+            {responseStatus == 'success' && (<div className='text-green-500 absolute top-24 laptop:top-0'>{responseMessage}</div>)}
+            {responseStatus == 'failure' && (<div className='text-red-500 absolute top-24 laptop:top-0'>{responseMessage}</div>)}
         </main>
     );
 }
@@ -316,7 +316,7 @@ export default function Playlists() {
     }, []);
 
     return (
-        <div className='h-full w-full flex items-center justify-center'>
+        <div className='min-h-[100vh] w-full flex items-center justify-center'>
             <Navbar/>
             <PlaylistsList playlists={playlists}/>
         </div>
