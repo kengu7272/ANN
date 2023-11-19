@@ -28,6 +28,8 @@ export default function Register() {
   const [registrationStatus, setRegistrationStatus] = useState('');
   const [registrationMessage, setRegistrationMessage] = useState('');
 
+  const [correctEmailFormat, setCorrectEmailFormat] = useState(true);
+
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -36,6 +38,10 @@ export default function Register() {
   };
   
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    pattern.test(event.target.value) ? setCorrectEmailFormat(true) : setCorrectEmailFormat(false);
+    
+
     setFormData((prevData) => ({
       ...prevData,
       email: event.target.value, // Update email
@@ -58,7 +64,7 @@ export default function Register() {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    if (formData.password === confirmPassword) {
+    if (formData.password === confirmPassword && correctEmailFormat) {
       try {
         const response = await fetch('/api/register', {
           method: 'POST',
@@ -102,13 +108,14 @@ export default function Register() {
           <input required type="password" placeholder="Password" className="h-[10%] p-2 rounded-xl text-neutral-900 w-4/5" value={formData.password} onChange={handlePasswordChange} />
           <input required type="password" placeholder="Confirm Password" className="h-[10%] p-2 rounded-xl text-neutral-900 w-4/5" onChange={handleConfirmPasswordChange} />
           {!passwordsMatch ? <div className="text-red-500">Passwords do not match</div> : null}
+          {!correctEmailFormat && <div className="text-red-500">Not a valid email</div>}
           {registrationStatus === 'success' && (
             <div className="text-green-500">{registrationMessage}<span> </span><a className='underline' href="/login">Back to login</a></div>
           )}
           {registrationStatus === 'failure' && (
             <div className="text-red-500">{registrationMessage}</div>
           )}
-          <input type="submit" value="Register" className="bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 h-1/6 mx-2 rounded-xl w-1/2" disabled={!passwordsMatch} />
+          {correctEmailFormat && passwordsMatch && <input type="submit" value="Register" className="bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 h-1/6 mx-2 rounded-xl w-1/2" disabled={!passwordsMatch} />}
         </form>
       </main>
     </div>
