@@ -98,8 +98,8 @@ export default function Register() {
   };
 
   return (
-    <div className="h-full w-full flex justify-center items-center">
-      <main className="bg-neutral-900 border-2 flex h-4/5 justify-center items-center desktop:max-h-[600px] max-w-[900px] opacity-90 relative shadow-neutral-900 shadow-2xl w-[90%] laptop:w-1/2">
+    <div className="h-[100vh] w-full flex justify-center items-center">
+      <main className="bg-neutral-900 border-2 flex h-3/4 justify-center items-center desktop:max-h-[600px] max-w-[900px] opacity-90 relative shadow-neutral-900 shadow-2xl w-[90%] laptop:w-1/2">
         <a href="/login" className='absolute top-2 left-2 text-lg laptop:text-2xl'>&lt;--</a>
         <form className="bg-transparent flex flex-col gap-8 h-[70%] tablet:h-4/5 items-center justify-center tablet:text-lg w-[95%]" onSubmit={handleSubmit}>
           <label className="text-3xl tablet:text-4xl">Register</label>

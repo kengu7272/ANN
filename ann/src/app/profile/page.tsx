@@ -153,9 +153,9 @@ export default function Register() {
   }
 
     return (
-        <div className="flex justify-center items-center h-full w-full">
+        <div className="flex justify-center items-center h-[1000px] w-full relative">
             <Navbar />
-                <div className="bg-neutral-900 border-2 relative flex h-3/4 justify-center items-center desktop:max-h-[600px] max-w-[900px] opacity-90 shadow-neutral-900 shadow-2xl w-[90%] laptop:w-1/2">
+                <div className="bg-neutral-900 border-2 relative flex h-3/5 justify-center items-center desktop:max-h-[600px] max-w-[900px] opacity-90 shadow-neutral-900 shadow-2xl w-[90%] laptop:w-1/2">
                   <a href="/home" className='absolute top-2 left-2 text-lg laptop:text-2xl'>&lt;--</a>
                     <form className="bg-transparent flex flex-col gap-8 h-[70%] tablet:h-4/5 items-center justify-center tablet:text-lg w-[95%]" onSubmit={handleSubmit}>
                         <label className="text-3xl tablet:text-4xl">Edit Profile</label>
@@ -174,7 +174,7 @@ export default function Register() {
                         (<input type="submit" value="Update Details" className="bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 h-1/6 mx-2 rounded-xl w-1/2" disabled={!passwordsMatch} />)}
                     </form>
                 </div>
-            <div>
+            <div className="mt-16 ">
                 <button onClick={logOut} className="absolute bottom-0 tablet:bottom-5 right-0 h-16 bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 mx-2 rounded-xl w-1/3 tablet:w-1/5 max-w-xs">Log Out</button>
                 <button onClick={() => setDeleteButton(true)} className="absolute bottom-0 tablet:bottom-5 h-16 left-0 bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 mx-2 rounded-xl w-1/3 tablet:w-1/5 max-w-xs">Delete Profile</button>
                 {deleteButton && 
