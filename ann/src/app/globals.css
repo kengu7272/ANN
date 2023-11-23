@@ -30,6 +30,9 @@ body {
   height: 500px;
   width: 100%;
   overflow: visible;
+  @apply scrollbar-thin;
+  @apply scrollbar-thumb-neutral-600;
+  @apply scrollbar-track-neutral-300;
   position: relative;
   background-image: url('../../images/Background_Music_studio_photo_ANN.jpg');
   background-position: center;
