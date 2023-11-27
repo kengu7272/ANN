@@ -63,7 +63,7 @@ export default function Create() {
     }
 
     return (
-        <div className="flex justify-center items-center h-full w-full">
+        <div className="flex justify-center items-center h-[100vh] w-full">
             <Navbar />
                 <div className="bg-neutral-900 relative border-2 flex h-1/2 justify-center items-center desktop:max-h-[600px] max-w-[900px] opacity-90 shadow-neutral-900 shadow-2xl w-[90%] laptop:w-1/2">
                     <a href="/home" className='absolute top-2 left-2 text-lg laptop:text-2xl'>&lt;--</a>
