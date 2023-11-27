@@ -1,5 +1,0 @@
-# Ignore development and build artifacts
-.next/
-node_modules/
-.env
-.gitignore

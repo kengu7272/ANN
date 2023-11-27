@@ -52,9 +52,11 @@ export async function POST(req: Request) {
         });
     }
     catch(error) {
-        return Response.json({ 
-            status: 500,
-            error: 'Internal server error or token verification failed, log in again' 
-          });
+        if(error instanceof Error) {
+            return Response.json({ 
+                status: 500,
+                error: error.message
+            });
+        }
     }
 }
