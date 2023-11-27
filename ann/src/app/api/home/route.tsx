@@ -1,28 +1,53 @@
 // home api endpoint - get request sends back trivia question
 
-import { headers } from "next/headers";
 import jwt from 'jsonwebtoken';
 import JwtPayload from "../payload";
 import db from "../db";
+
+import { headers } from 'next/headers'
 import { RowDataPacket, FieldPacket } from "mysql2";
 
 export async function GET(req: Request) {
-    const headersList: Headers = headers();
-    const token = headersList.get('token');
+  try {
+    const headersList = headers();
+        const token = headersList.get('Authorization');
 
-    // delete this later
-    const data: string = await req.json() as string;
+        if (!token) {
+            return Response.json({
+                status: 407,
+                error: 'No token'
+            });
+        }
 
-    if (!token) {
+        const { userid } = jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
+
+    // Replace this query with your logic to fetch the trivia question from the database
+    const [question]: [RowDataPacket[], FieldPacket[]] = await db.query(
+      'SELECT * FROM users WHERE userid = ? ORDER BY RAND() LIMIT 1',
+      [userid]
+    );
+
+    if(question.length === 0) {
         return Response.json({
-            status: 407,
-            error: 'No token'
+            status: 204,
+            message: 'There are no playlists yet'
         });
     }
 
-    const { userid } = jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
-
     return Response.json({
-        status: 207
-    })
+        status: 200,
+        message: 'Playlists retrieved succesfully',
+        question: question
+    });
+  } catch(error) {
+    let errorMessage = '';
+    if (error instanceof Error) {
+         errorMessage = error.message + " unhandled server error";
+      }
+
+    return Response.json({ 
+        status: 500,
+        message: errorMessage
+      });
+}
 }
