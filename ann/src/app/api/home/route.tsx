@@ -10,23 +10,29 @@ import { RowDataPacket, FieldPacket } from "mysql2";
 export async function GET(req: Request) {
   try {
     const headersList = headers();
-        const token = headersList.get('Authorization');
+    const token = headersList.get('Authorization');
 
-        if (!token) {
-            return Response.json({
-                status: 407,
-                error: 'No token'
-            });
-        }
+    if (!token) {
+        return Response.json({
+            status: 407,
+            error: 'No token'
+        });
+    }
 
-        const { userid } = jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
+    const { userid } = jwt.verify(token, process.env.SECRET_KEY!) as JwtPayload;
 
     // Replace this query with your logic to fetch the trivia question from the database
     const [question]: [RowDataPacket[], FieldPacket[]] = await db.query(
-      'SELECT * FROM users WHERE userid = ? ORDER BY RAND() LIMIT 1',
+      `SELECT * 
+      FROM playlists JOIN playlist_songs
+      ON playlists.playlistid = playlist_songs.playlistid JOIN songs
+      ON songs.songid = playlist_songs.songid JOIN artists
+      ON artists.artistid = songs.artistid
+      WHERE userid = ? 
+      ORDER BY RAND() LIMIT 1`,
       [userid]
     );
-
+    
     if(question.length === 0) {
         return Response.json({
             status: 204,
@@ -37,7 +43,7 @@ export async function GET(req: Request) {
     return Response.json({
         status: 200,
         message: 'Playlists retrieved succesfully',
-        question: question
+        question: "What artist made: " + question[0].songs
     });
   } catch(error) {
     let errorMessage = '';

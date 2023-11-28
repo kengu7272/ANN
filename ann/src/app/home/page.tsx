@@ -5,17 +5,18 @@ import Navbar from '../components/navbar';
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from 'react';
 
-interface Question {
-    question: string;
-    answer: string;
+interface ResponseData {
+  status: number,
+  error: string,
+  message: string,
+  question: string
 }
 
 export default function Home() {
-    const [token, setToken] = useState('');
-    const [question, setQuestion] = useState<Question | null>(null); // State to store the question
+    const [question, setQuestion] = useState<string | null>(null); // State to store the question
     const router = useRouter();
   
-    const getQuestion = async () => {
+    const getQuestion = async (token: string) => {
       try {
         const response = await fetch('/api/home', {
           method: 'GET',
@@ -24,10 +25,10 @@ export default function Home() {
           },
         });
   
-        const data = await response.json();
-  
-        if (response.ok) {
-          setQuestion(data); // Update the state with the received question
+        const data = await response.json() as ResponseData;
+
+        if (data.status >= 200 && data.status < 300) {
+          setQuestion(data.question); // Update the state with the received question
         } else {
           console.error('Error fetching question:', data.error);
         }
@@ -37,16 +38,14 @@ export default function Home() {
     };
   
     useEffect(() => {
-      const token = sessionStorage.getItem('token');
-      if (!token) {
+      const getToken: string | null = sessionStorage.getItem('token');
+      if (!getToken) {
         router.push('/login');
         return;
       }
-  
-      setToken(token);
-  
-      // send request to get trivia question when visiting page
-      void getQuestion();
+    
+      // Use getToken directly for immediate operations
+      getQuestion(getToken);
     }, []);
 
     return (
@@ -58,7 +57,7 @@ export default function Home() {
               {/* Display the question if available */}
               {question && (
                 <>
-                  <p>{question.question}</p>
+                  <p>{question}</p>
                   <input required type="text" placeholder="Answer" className="h-[10%] p-2 rounded-xl text-neutral-900 w-4/5" />
                   <input type="submit" value="Submit" className="bg-neutral-700 hover:bg-neutral-600 active:bg-neutral-800 h-1/6 mx-2 rounded-xl w-1/2" />
                 </>
