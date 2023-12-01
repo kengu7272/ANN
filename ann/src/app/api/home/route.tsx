@@ -23,16 +23,17 @@ export async function GET(req: Request) {
 
     // Replace this query with your logic to fetch the trivia question from the database
     const [question]: [RowDataPacket[], FieldPacket[]] = await db.query(
-      `SELECT * 
+      `SELECT songs.title AS song, artists.name AS artist, songs.videoLink as video 
       FROM playlists JOIN playlist_songs
       ON playlists.playlistid = playlist_songs.playlistid JOIN songs
       ON songs.songid = playlist_songs.songid JOIN artists
       ON artists.artistid = songs.artistid
-      WHERE userid = ? 
+      WHERE playlists.userid = ? 
       ORDER BY RAND() LIMIT 1`,
       [userid]
     );
-    
+    console.log(question[0]);
+
     if(question.length === 0) {
         return Response.json({
             status: 204,
@@ -42,8 +43,11 @@ export async function GET(req: Request) {
 
     return Response.json({
         status: 200,
+        error: 0,
         message: 'Playlists retrieved succesfully',
-        question: "What artist made: " + question[0].songs
+        question: "What artist made: " + question[0].song,
+        answer: question[0].artist,
+        video: question[0].video
     });
   } catch(error) {
     let errorMessage = '';
