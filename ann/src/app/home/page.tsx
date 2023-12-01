@@ -46,14 +46,14 @@ export default function Home() {
   const extractVideoId = (videoLink: string) => {
     // Extract the video ID from the YouTube link
     const videoIdMatch = videoLink.match(/(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-    return videoIdMatch ? videoIdMatch[1] : '';
+    return videoIdMatch ? videoIdMatch[1] : undefined;
   };
 
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserAnswer(e.target.value);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (question) {
@@ -71,12 +71,12 @@ export default function Home() {
     setShowVideo(false); // Reset video visibility
     const getToken: string | null = sessionStorage.getItem('token');
     if (getToken) {
-      getQuestion(getToken);
+      void getQuestion(getToken);
     }
   };
 
   const handleLoadNewQuestionClick = () => {
-    loadNewQuestion();
+    void loadNewQuestion();
   };
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export default function Home() {
       return;
     }
 
-    getQuestion(getToken);
+    void getQuestion(getToken);
   }, []);
 
   return (

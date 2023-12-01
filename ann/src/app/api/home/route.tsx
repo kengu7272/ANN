@@ -46,8 +46,8 @@ export async function GET(req: Request) {
         error: 0,
         message: 'Playlists retrieved succesfully',
         question: "What artist made: " + question[0].song,
-        answer: question[0].artist,
-        video: question[0].video
+        answer: question[0].artist as string,
+        video: question[0].video as string
     });
   } catch(error) {
     let errorMessage = '';
