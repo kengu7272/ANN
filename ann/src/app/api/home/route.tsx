@@ -32,7 +32,6 @@ export async function GET(req: Request) {
       ORDER BY RAND() LIMIT 1`,
       [userid]
     );
-    console.log(question[0]);
 
     if(question.length === 0) {
         return Response.json({

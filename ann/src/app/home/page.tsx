@@ -92,7 +92,7 @@ export default function Home() {
   return (
     <div className="h-[1000px] max-h-[1000px] w-full flex justify-center items-center">
       <Navbar />
-      <main className="bg-neutral-900 border-2 flex h-3/5 justify-center items-center desktop:max-h-[600px] max-w-[900px] opacity-90 shadow-neutral-900 shadow-2xl w-[90%] laptop:w-1/2">
+      <main className="bg-neutral-900 border-2 flex h-3/5 tablet:h-3/4 justify-center items-center desktop:max-h-[750px] max-w-[900px] opacity-90 shadow-neutral-900 shadow-2xl w-[90%] laptop:w-1/2">
         <form
           onSubmit={handleSubmit}
           className="bg-transparent flex flex-col gap-4 h-[70%] tablet:h-4/5 items-center justify-center tablet:text-lg w-[95%]"
@@ -128,10 +128,10 @@ export default function Home() {
               {result && result === "Wrong answer. Try again." && <p className="text-red-500">{result}</p>}
               {/* Embed the YouTube video when the result is correct and showVideo is true */}
               {showVideo && (
-                <iframe className="tablet:max-w-[400px] max-w-[300px] tablet:min-h-[200px] mb-5"
+                <iframe className="tablet:max-w-[560px] max-w-[300px] tablet:min-h-[315px] mb-5"
                   width="560"
                   height="315"
-                  src={`https://www.youtube.com/embed/${extractVideoId(question.video)}`}
+                  src={`https://www.youtube.com/embed/${extractVideoId(question.video)}?autoplay=1`}
                   title="YouTube video player"
                   frameBorder="0"
                   allowFullScreen
