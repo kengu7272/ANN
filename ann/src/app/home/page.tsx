@@ -36,7 +36,7 @@ export default function Home() {
       if (data.status >= 200 && data.status < 300) {
         setQuestion(data);
       } else {
-        console.error('Error fetching question:', data.error);
+        console.error('Error fetching question:', data.message);
       }
     } catch (error) {
       console.error('Error fetching question:', error);
