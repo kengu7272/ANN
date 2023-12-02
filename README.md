@@ -15,7 +15,7 @@ MySQL: Hosted on PlanetScale
 - Create playlist + display playlists - implemented
 - Song search - implemented
 - Music video search - implemented
-- Music Trivia - needs implemented
+- Music Trivia - implemented
 
 ## View The Site  
 https://ann-snowy.vercel.app/
@@ -25,5 +25,5 @@ https://ann-snowy.vercel.app/
 2. Logging in and being issued a jsonwebtoken for authentication
 3. Editing account details or deleting account
 4. Creating playlists, add songs, delete songs, view youtube video for song, and display playlist 
-
+5. Playing the basic music trivia
 
