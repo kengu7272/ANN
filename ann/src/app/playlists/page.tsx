@@ -53,7 +53,7 @@ interface RequestData {
 
 // Component that holds playlists list and generates songs list based on selected playlist
 const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
-    const [playlistNum, setPlaylistNum] = useState(-1);
+    const [playlistNum, setPlaylistNum] = useState<number>(-1);
     const [playlistName, setPlaylistName] = useState('');
     const [playlistSongs, setPlaylistSongs] = useState<PlaylistSongsColumns[]>([]);
 
@@ -65,6 +65,10 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     const [responseStatus, setResponseStatus] = useState('');
 
     const[view, setView] = useState(false);
+
+    const [deleteConfirm, setDeleteConfirm] = useState(false);
+
+    const router = useRouter();
 
     // This function gets song based on selected playlist
     const getSongs = async (playlistid: number) => {
@@ -197,8 +201,43 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
         }
     }
 
+    const deletePlaylist = async (playlist: number) => {
+        const token: string = sessionStorage.getItem('token')!;
+        const response = await fetch("/api/playlists", {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            body: JSON.stringify({
+                playlist: playlist
+            })
+        })
+
+        const data = await response.json() as { status: number, message: string, error: string };
+
+        if(response.ok) {
+            console.log(data.message);
+            setResponseStatus('success');
+            setResponseMessage(data.message);
+        }
+        else {
+            console.log('fail');
+            setResponseStatus('failure');
+            setResponseMessage(data.error);
+        }
+
+        window.location.reload();
+    }
+
     useEffect(() => {
-        if (playlistNum !== -1 && !addSong) {
+        const getToken: string | null = sessionStorage.getItem('token');
+        if (!getToken) {
+            router.push('/login');
+            return;
+        }
+
+        if (playlistNum !== -1 && !addSong && !deleteConfirm) {
             void getSongs(playlistNum);
           }
     }, [playlistNum, view]);
@@ -215,6 +254,16 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
                                 <div className=' absolute right-4 flex flex-row gap-4 items-center justify-center'>
                                     <button onClick={() => { setPlaylistNum(playlist.playlistid); setAddSong(false); setSearchResults([]); setView(true);}} className='active:text-neutral-400'>View</button>
                                     <button onClick={() => {setAddSong(true); setView(false); setPlaylistNum(playlist.playlistid); setPlaylistName(playlist.name); setSearchResults([]); setPlaylistSongs([]);}} className='active:text-neutral-400'>Add</button>
+                                    {(!deleteConfirm || playlistNum !== playlist.playlistid) && <button onClick={() => {setPlaylistNum(playlist.playlistid); setDeleteConfirm(true)}}>Delete</button>}
+                                    {deleteConfirm && playlistNum === playlist.playlistid && (
+                                        <div className='flex flex-col justify-center items-center'>
+                                            <p>Are you sure?</p>
+                                            <div className='flex flex-row gap-4'>
+                                                <button onClick={() => {void deletePlaylist(playlistNum); setView(false); setPlaylistNum(-1); setSearchResults([]); setPlaylistSongs([]);}} className='bg-red-400 rounded-2xl px-2'>Yes</button>
+                                                <button onClick={() => {setDeleteConfirm(false)}}>No</button>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ))
@@ -277,8 +326,8 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
 }
 
 export default function Playlists() {
-    const router = useRouter();
     const [playlists, setPlaylists] = useState<PlaylistColumns[]>([]);
+    const router = useRouter();
 
     // gathers user playlist once component mounts
     useEffect(() => {
