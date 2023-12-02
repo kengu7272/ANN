@@ -7,6 +7,8 @@ import db from "../db";
 import { headers } from 'next/headers'
 import { RowDataPacket, FieldPacket } from "mysql2";
 
+export const dynamic = "force-dynamic"
+
 export async function GET(req: Request) {
   try {
     const headersList = headers();
