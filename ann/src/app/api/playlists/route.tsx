@@ -50,3 +50,44 @@ export async function GET(req: Request) {
           });
     }
 }
+
+export async function DELETE(req: Request) {
+    try {
+        const headersList = headers();
+        const token = headersList.get('Authorization');
+        const data = await req.json() as { playlist: number };
+        const playlist = data.playlist;
+
+        if (!token) {
+            return Response.json({
+                status: 407,
+                error: 'No token'
+            });
+        }
+
+        await db.execute(
+            `DELETE FROM playlist_songs
+            WHERE playlistid = ?`,
+            [playlist]
+        )
+
+        await db.execute(
+            `DELETE FROM playlists
+            WHERE playlistid = ?`,
+            [playlist]
+        )
+
+        return Response.json({
+            status: 200,
+            message: 'Playlist deleted successfully'
+        })
+    }
+    catch(error) {
+        if(error instanceof Error) {
+            return Response.json({
+                status: 500,
+                error: error.message,
+            })
+        }
+    }
+}
