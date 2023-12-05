@@ -365,7 +365,7 @@ export default function Playlists() {
     }, []);
 
     return (
-        <div className='min-h-[1000px] w-full flex items-center justify-center'>
+        <div className='min-h-[100vh] w-full flex items-center justify-center'>
             <Navbar/>
             <PlaylistsList playlists={playlists}/>
         </div>
