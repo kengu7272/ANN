@@ -13,13 +13,13 @@ export default function Navbar() {
 
     useEffect(() => {
     if(path == "/create") {
-        setCreateClassName('underline');
+        setCreateClassName('border-b');
     }
     else if(path == "/playlists") {
-        setPlaylistsClassName('underline');
+        setPlaylistsClassName('border-b');
     }
     else if(path == "/profile") {
-        setProfileClassName('underline');
+        setProfileClassName('border-b');
     }
 
     }, [])

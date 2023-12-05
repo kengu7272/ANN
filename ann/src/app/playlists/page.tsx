@@ -243,10 +243,10 @@ const PlaylistsList: React.FC<PlaylistListProps> = ({playlists}) => {
     }, [playlistNum, view]);
 
     return (
-        <main className='w-[95%] flex flex-col laptop:flex-row gap-8 h-[70%] items-center justify-center relative'>
+        <main className='w-[95%] flex flex-col laptop:flex-row gap-8 items-center justify-center relative'>
             <div className='mt-32 laptop:mt-0 w-full laptop:w-1/2 text-center'>
                 <p className='text-4xl mb-2'>Playlists</p>
-                <div className='bg-neutral-900 border-2 0 flex flex-col h-[400px] laptop:h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
+                <div className='bg-neutral-900 border-2 0 flex flex-col h-[500px] opacity-90 overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-600 scrollbar-track-neutral-300'>
                     {playlists.length > 0 ? (
                         playlists.map((playlist) => (
                             <div className='even:bg-neutral-800 relative flex flex-none items-center h-16 w-full px-2' key={playlist.playlistid}> 
