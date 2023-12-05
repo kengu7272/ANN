@@ -109,7 +109,6 @@ export async function POST(req: Request) {
             
             const musicVideoData = await musicVideoResponse.json() as { items: YouTubeVideo[] };
 
-            console.log(musicVideoData);
             let videoLink = '';
             const firstVideo: YouTubeVideo = musicVideoData.items[0];
             const videoId = firstVideo.id.videoId;
